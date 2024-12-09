@@ -16,6 +16,7 @@ export default function AudioControls({
   onNextLine,
   disabled = false,
 }: AudioControlsProps) {
+  const ariaLabel = isPlaying ? "Pause" : "Click to play";
   return (
     <div className="mx-auto bg-gradient-to-r from-zinc-700 via-zinc-700 to-zinc-600 rounded-lg px-3 py-5 flex justify-between items-center">
       <button>
@@ -24,6 +25,7 @@ export default function AudioControls({
       <button
         onClick={onTogglePlayPause}
         disabled={disabled}
+        aria-label={ariaLabel}
       >
         <LucidePlay stroke="white" fill="white" size={32} />
       </button>
