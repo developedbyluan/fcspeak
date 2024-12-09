@@ -1,5 +1,7 @@
 "use client";
-import { LucidePlay, LucideSkipForward, Mic, SkipForwardIcon } from "lucide-react";
+import { LucidePlay, LucideSkipForward, Mic } from "lucide-react";
+
+import { AnimatePresence, motion } from "framer-motion";
 
 interface AudioControlsProps {
   isPlaying: boolean;
@@ -18,23 +20,32 @@ export default function AudioControls({
 }: AudioControlsProps) {
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
   return (
-    <div className="mx-auto bg-gradient-to-r from-zinc-700 via-zinc-700 to-zinc-600 rounded-lg px-3 py-5 flex justify-between items-center">
-      <button>
-        <Mic stroke="white" size={32} />
-      </button>
-      <button
-        onClick={onTogglePlayPause}
-        disabled={disabled}
-        aria-label={ariaLabel}
-      >
-        <LucidePlay stroke="white" fill="white" size={32} />
-      </button>
-      <button
-        onClick={onNextLine}
-        disabled={disabled}
-      >
-        <LucideSkipForward stroke="white" fill="white" size={32} />
-      </button>
-    </div>
+    <AnimatePresence>
+      {!isPlaying && (
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 100 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          className="fixed w-full bottom-2 px-1" 
+        >
+          <div className="mx-auto bg-gradient-to-r from-zinc-700 via-zinc-700 to-zinc-600 rounded-xl px-3 py-5 flex justify-between items-center">
+            <button>
+              <Mic stroke="white" size={32} />
+            </button>
+            <button
+              onClick={onTogglePlayPause}
+              disabled={disabled}
+              aria-label={ariaLabel}
+            >
+              <LucidePlay stroke="white" fill="white" size={32} />
+            </button>
+            <button onClick={onNextLine} disabled={disabled}>
+              <LucideSkipForward stroke="white" fill="white" size={32} />
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
