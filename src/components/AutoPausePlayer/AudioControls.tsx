@@ -1,9 +1,16 @@
 "use client";
-import { ChevronDown, Languages, LucidePlay, LucideSkipForward, Mic } from "lucide-react";
+import {
+  ChevronDown,
+  Languages,
+  LucidePlay,
+  LucideSkipForward,
+  MessageSquareQuote,
+  Mic,
+} from "lucide-react";
 
 import { AnimatePresence, motion } from "framer-motion";
 
-interface AudioControlsProps {
+type AudioControlsProps = {
   isPlaying: boolean;
   isLineFinished: boolean;
   onTogglePlayPause: () => void;
@@ -11,6 +18,8 @@ interface AudioControlsProps {
   disabled?: boolean;
   onShowTranslation: () => void;
   showTranslation: boolean;
+  onShowIPA: () => void;
+  showIPA: boolean;
 }
 
 export default function AudioControls({
@@ -21,6 +30,8 @@ export default function AudioControls({
   disabled = false,
   onShowTranslation,
   showTranslation,
+  onShowIPA,
+  showIPA,
 }: AudioControlsProps) {
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
   return (
@@ -36,21 +47,28 @@ export default function AudioControls({
           >
             <ChevronDown stroke="white" size={32} />
           </motion.button>
-          <motion.button
+          <motion.div
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 0.5 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed top-3 right-1 px-4 py-3 rounded-2xl bg-gradient-to-r from-zinc-700 to-zinc-600"
-            aria-label="Show translation"
-            onClick={onShowTranslation}
+            className="fixed top-3 right-1 flex items-center gap-7 px-4 py-3 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
           >
-            <Languages
-              stroke="white"
-              strokeWidth={showTranslation ? 2 : 0.75}
-              size={32}
-            />
-          </motion.button>
+            <button onClick={onShowIPA} aria-label="Show translation">
+              <MessageSquareQuote
+                stroke="white"
+                strokeWidth={showIPA ? 2 : 0.75}
+                size={32}
+              />
+            </button>
+            <button onClick={onShowTranslation} aria-label="Show translation">
+              <Languages
+                stroke="white"
+                strokeWidth={showTranslation ? 2 : 0.75}
+                size={32}
+              />
+            </button>
+          </motion.div>
           <motion.div
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 100 }}

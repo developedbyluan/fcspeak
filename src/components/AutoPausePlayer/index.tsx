@@ -10,6 +10,8 @@ type AutoPausePlayerProps = {
   onNextLine: () => void;
   onShowTranslation: () => void;
   showTranslation: boolean;
+  onShowIPA: () => void;
+  showIPA: boolean;
 };
 
 export default function AutoPausePlayer({
@@ -20,6 +22,8 @@ export default function AutoPausePlayer({
   onNextLine,
   onShowTranslation,
   showTranslation,
+  onShowIPA,
+  showIPA,
 }: AutoPausePlayerProps) {
   return (
     <div>
@@ -28,6 +32,7 @@ export default function AutoPausePlayer({
         isPlaying={isPlaying}
         isLineFinished={isLineFinished}
         showTranslation={showTranslation}
+        showIPA={showIPA}
       />
       <AudioControls
         isPlaying={isPlaying}
@@ -36,6 +41,8 @@ export default function AutoPausePlayer({
         onNextLine={onNextLine}
         onShowTranslation={onShowTranslation}
         showTranslation={showTranslation}
+        onShowIPA={onShowIPA}
+        showIPA={showIPA}
       />
     </div>
   );

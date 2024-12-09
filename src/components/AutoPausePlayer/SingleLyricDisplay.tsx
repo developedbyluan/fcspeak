@@ -7,6 +7,7 @@ type LyricsDisplayProps = {
   isLineFinished: boolean;
   fontSize?: "small" | "medium" | "large";
   showTranslation: boolean;
+  showIPA: boolean;
 };
 
 export default function SingleLyricDisplay({
@@ -15,6 +16,7 @@ export default function SingleLyricDisplay({
   isLineFinished,
   fontSize = "medium",
   showTranslation,
+  showIPA,
 }: LyricsDisplayProps) {
   const fontSizeClasses = {
     small: "text-base",
@@ -52,6 +54,15 @@ export default function SingleLyricDisplay({
             >
               {currentLyric?.translation}
             </p>
+          </>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        {showIPA && (
+          <>
+            <h3 className="text-sm font-medium text-gray-500">IPA</h3>
+            <p className="text-gray-700">{currentLyric?.ipa}</p>
           </>
         )}
       </div>
