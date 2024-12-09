@@ -1,12 +1,12 @@
-// src/components/AudioPlayer/AudioControls.tsx
 "use client";
 import { Button } from "@/components/ui/button";
-import { PlayIcon, PauseIcon, RotateCcwIcon } from "lucide-react";
+import { PauseIcon, Repeat1Icon, SkipForwardIcon } from "lucide-react";
 
 interface AudioControlsProps {
   isPlaying: boolean;
   isLineFinished: boolean;
   onTogglePlayPause: () => void;
+  onNextLine: () => void;
   disabled?: boolean;
 }
 
@@ -14,6 +14,7 @@ export default function AudioControls({
   isPlaying,
   isLineFinished,
   onTogglePlayPause,
+  onNextLine,
   disabled = false,
 }: AudioControlsProps) {
   return (
@@ -31,10 +32,13 @@ export default function AudioControls({
           </>
         ) : (
           <>
-            <PlayIcon className="mr-2 h-4 w-4" />
-            {isLineFinished ? "Play Next" : "Play"}
+            <Repeat1Icon className="mr-2 h-4 w-4" />
+            Replay
           </>
         )}
+      </Button>
+      <Button onClick={onNextLine} disabled={disabled} variant="secondary">
+        <SkipForwardIcon className="mr-2 h-4 w-4" />
       </Button>
     </div>
   );

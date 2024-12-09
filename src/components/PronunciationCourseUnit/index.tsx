@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
 import { unit1 } from "@/data/pronunciation/unit1-lyrics-data";
 import AudioFileInput from "@/components/AudioPlayer/AudioFileInput";
-import AudioControls from "../AutoPausePlayer/AudioControls";
+import AutoPausePlayer from "../AutoPausePlayer";
 import { LyricsUnit } from "@/types/lyric";
 
 export default function PronunciationCourseUnit() {
@@ -28,18 +28,23 @@ export default function PronunciationCourseUnit() {
     isLineFinished,
     handleAudioTogglePlayPause,
     lyricsUnitMeta,
+    currentLyricIndex,
+    handleNextLine,
   } = useAudioPlayer(lyricsUnit);
 
+  const currentLyric = lyricsUnit?.lyrics[currentLyricIndex];
 
   return (
     <div>
-      {audioSrc ? (
+      {audioSrc && currentLyric ? (
         <div>
           <audio ref={audioRef} src={audioSrc} />
-          <AudioControls
+          <AutoPausePlayer
+            currentLyric={currentLyric}
             isPlaying={isPlaying}
             isLineFinished={isLineFinished}
             onTogglePlayPause={handleAudioTogglePlayPause}
+            onNextLine={handleNextLine}
           />
         </div>
       ) : (

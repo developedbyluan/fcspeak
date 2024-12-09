@@ -9,14 +9,19 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const [lyricsUnitMeta, setLyricsUnitMeta] = useState<LyricsUnitMeta | null>(
     null
   );
+  const lineTimeOutRef = useRef<NodeJS.Timeout | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     if (!lyricsUnit) return;
-
     setLyricsUnitMeta(lyricsUnit.meta);
   }, [lyricsUnit]);
+
+  useEffect(() => {
+    if (!lyricsUnit) return;
+    handleAudioTogglePlayPause();
+  }, [currentLyricIndex]);
 
   const handleAudioFileChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -40,23 +45,51 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   };
 
   const handleAudioTogglePlayPause = () => {
-    if (!lyricsUnit || !audioRef.current) return;
+    const audioElement = audioRef.current;
+    const lineTimeOut = lineTimeOutRef.current;
+    if (!audioElement || !lyricsUnit) return;
 
     if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      if (isLineFinished) {
-        setCurrentLyricIndex((prevIndex) =>
-          prevIndex < lyricsUnit.lyrics.length - 1 ? prevIndex + 1 : 0
-        );
-        setIsLineFinished(false);
+      if (lineTimeOut) {
+        clearTimeout(lineTimeOut);
+        lineTimeOutRef.current = null;
       }
-      audioRef.current.currentTime =
-        lyricsUnit.lyrics[currentLyricIndex].startTime;
-      audioRef.current.play();
-      setIsPlaying(true);
+      audioElement.pause();
+      setIsPlaying(false);
+      return;
     }
+
+    audioElement.currentTime = lyricsUnit.lyrics[currentLyricIndex].startTime;
+    audioElement.play();
+    setIsPlaying(true);
+    handleLineFinished();
+  };
+
+  const handleLineFinished = () => {
+    const audioElement = audioRef.current;
+    if (!audioElement) return;
+    if (!lyricsUnit) return;
+
+    const startTime = lyricsUnit.lyrics[currentLyricIndex].startTime;
+    const endTime = lyricsUnit.lyrics[currentLyricIndex].endTime;
+    const lineDuration = endTime - startTime;
+
+    lineTimeOutRef.current = setTimeout(() => {
+      audioElement.pause();
+      setIsPlaying(false);
+      setIsLineFinished(true);
+    }, lineDuration * 1000);
+  };
+
+  const handleNextLine = () => {
+    console.log("handleNextLine");
+    if (!lyricsUnit) return;
+    if (currentLyricIndex === lyricsUnit.lyrics.length - 1) {
+      setCurrentLyricIndex(0);
+    } else {
+      setCurrentLyricIndex((prevIndex) => prevIndex + 1);
+    }
+    setIsLineFinished(false);
   };
 
   return {
@@ -67,5 +100,8 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     isLineFinished,
     handleAudioTogglePlayPause,
     lyricsUnitMeta,
+    currentLyricIndex,
+    handleLineFinished,
+    handleNextLine,
   };
 }
