@@ -1,6 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Lesson } from "@/types/lesson";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 type LessonCardProps = {
   lesson: Lesson;
@@ -8,11 +10,29 @@ type LessonCardProps = {
 };
 
 export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
+  const router = useRouter();
+
+  const handleLessonCardClick = () => {
+    router.push(`/pronunciation/unit${lesson.id}`);
+  };
+
   return (
     <>
       <Card
         key={lesson.id}
-        className={isVertical ? "w-full" : "w-[250px] shrink-0"}
+        className={cn(
+          "w-full cursor-pointer transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[1] active:shadow-none",
+          isVertical ? "w-full" : "w-[250px] shrink-0",
+        )}
+        onClick={handleLessonCardClick}
+        role="button"
+        aria-label={`Go to Unit ${lesson.id}`}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleLessonCardClick();
+          }
+        }}
       >
         <CardContent className="p-4">
           <div
