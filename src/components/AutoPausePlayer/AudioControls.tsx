@@ -18,7 +18,7 @@ export default function AudioControls({
   disabled = false,
 }: AudioControlsProps) {
   return (
-    <div className="flex items-center justify-between gap-4">
+    <div className="mx-auto bg-gradient-to-r from-zinc-700 via-zinc-700 to-zinc-600 rounded-lg px-3 py-5 flex justify-between items-center">
       <Button
         onClick={onTogglePlayPause}
         className="flex-1 flex items-center justify-center"
