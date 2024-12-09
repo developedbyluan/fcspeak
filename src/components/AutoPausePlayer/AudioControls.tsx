@@ -21,13 +21,13 @@ export default function AudioControls({
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
   return (
     <AnimatePresence>
-      {!isPlaying && (
+      {!isPlaying ? (
         <motion.div
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 100 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="fixed w-full bottom-2 px-1" 
+          className="fixed w-full bottom-2 px-1"
         >
           <div className="mx-auto bg-gradient-to-r from-zinc-700 via-zinc-700 to-zinc-600 rounded-xl px-3 py-5 flex justify-between items-center">
             <button>
@@ -45,6 +45,8 @@ export default function AudioControls({
             </button>
           </div>
         </motion.div>
+      ) : (
+        <div className="fixed z-50 inset-0"></div> 
       )}
     </AnimatePresence>
   );
