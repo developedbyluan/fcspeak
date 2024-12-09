@@ -2,10 +2,15 @@
 
 import { useState } from "react";
 import CourseCardHeader from "./CourseCardHeader";
-import { lessons } from "@/data/lessons";
 import LessonGrid from "./LessonGrid";
+import { Lesson } from "@/types/lesson";
 
-export default function CourseCard() {
+type CourseCardProps = {
+  title: string;
+  lessons: Lesson[];
+};
+
+export default function CourseCard({ title, lessons }: CourseCardProps) {
   const [isVertical, setIsVertical] = useState(false);
 
   const handleLayoutToggle = () => {
@@ -15,7 +20,7 @@ export default function CourseCard() {
   return (
     <>
       <CourseCardHeader
-        title="Pronunciation Course"
+        title={title}
         isVertical={isVertical}
         onLayoutToggle={handleLayoutToggle}
       />
