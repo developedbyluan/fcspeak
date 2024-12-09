@@ -1,6 +1,6 @@
 import { Lesson } from "@/types/lesson";
 
-export const lessons: Lesson[] = [
+export const pronunciationLessonsList: Lesson[] = [
   {
     id: 1,
     title: "Lesson 1",
