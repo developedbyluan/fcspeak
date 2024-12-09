@@ -6,6 +6,7 @@ type LyricsDisplayProps = {
   isPlaying: boolean;
   isLineFinished: boolean;
   fontSize?: "small" | "medium" | "large";
+  showTranslation: boolean;
 };
 
 export default function SingleLyricDisplay({
@@ -13,6 +14,7 @@ export default function SingleLyricDisplay({
   isPlaying,
   isLineFinished,
   fontSize = "medium",
+  showTranslation,
 }: LyricsDisplayProps) {
   const fontSizeClasses = {
     small: "text-base",
@@ -39,15 +41,19 @@ export default function SingleLyricDisplay({
       </div>
 
       <div className="space-y-2">
-        <h3 className="text-sm font-medium text-gray-500">Translation</h3>
-        <p
-          className={cn(
-            "text-gray-700",
-            fontSize === "large" ? "text-lg" : "text-base"
-          )}
-        >
-          {currentLyric?.translation}
-        </p>
+        {showTranslation && (
+          <>
+            <h3 className="text-sm font-medium text-gray-500">Translation</h3>
+            <p
+              className={cn(
+                "text-gray-700",
+                fontSize === "large" ? "text-lg" : "text-base"
+              )}
+            >
+              {currentLyric?.translation}
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

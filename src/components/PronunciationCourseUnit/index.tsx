@@ -7,6 +7,7 @@ import { LyricsUnit } from "@/types/lyric";
 
 export default function PronunciationCourseUnit() {
   const [lyricsUnit, setLyricsUnit] = useState<LyricsUnit | null>(null);
+  const [showTranslation, setShowTranslation] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +35,10 @@ export default function PronunciationCourseUnit() {
 
   const currentLyric = lyricsUnit?.lyrics[currentLyricIndex];
 
+  const handleShowTranslation = () => {
+    setShowTranslation((prev) => !prev);
+  };
+
   return (
     <div>
       {audioSrc && currentLyric ? (
@@ -45,6 +50,8 @@ export default function PronunciationCourseUnit() {
             isLineFinished={isLineFinished}
             onTogglePlayPause={handleAudioTogglePlayPause}
             onNextLine={handleNextLine}
+            onShowTranslation={handleShowTranslation}
+            showTranslation={showTranslation}
           />
         </div>
       ) : (

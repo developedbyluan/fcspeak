@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown, LucidePlay, LucideSkipForward, Mic } from "lucide-react";
+import { ChevronDown, Languages, LucidePlay, LucideSkipForward, Mic } from "lucide-react";
 
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -9,6 +9,8 @@ interface AudioControlsProps {
   onTogglePlayPause: () => void;
   onNextLine: () => void;
   disabled?: boolean;
+  onShowTranslation: () => void;
+  showTranslation: boolean;
 }
 
 export default function AudioControls({
@@ -17,6 +19,8 @@ export default function AudioControls({
   onTogglePlayPause,
   onNextLine,
   disabled = false,
+  onShowTranslation,
+  showTranslation,
 }: AudioControlsProps) {
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
   return (
@@ -31,6 +35,21 @@ export default function AudioControls({
             className="fixed top-3 left-1 px-4 py-3 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
           >
             <ChevronDown stroke="white" size={32} />
+          </motion.button>
+          <motion.button
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 0.5 }}
+            exit={{ y: -100, opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="fixed top-3 right-1 px-4 py-3 rounded-2xl bg-gradient-to-r from-zinc-700 to-zinc-600"
+            aria-label="Show translation"
+            onClick={onShowTranslation}
+          >
+            <Languages
+              stroke="white"
+              strokeWidth={showTranslation ? 2 : 0.75}
+              size={32}
+            />
           </motion.button>
           <motion.div
             initial={{ y: 100, opacity: 0 }}
