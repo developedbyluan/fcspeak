@@ -1,9 +1,25 @@
+import { useEffect, useState } from "react";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
 import { unit1 } from "@/data/pronunciation/unit1-lyrics-data";
 import AudioFileInput from "@/components/AudioPlayer/AudioFileInput";
 import AudioControls from "../AutoPausePlayer/AudioControls";
+import { LyricsUnit } from "@/types/lyric";
 
 export default function PronunciationCourseUnit() {
+  const [lyricsUnit, setLyricsUnit] = useState<LyricsUnit | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        setLyricsUnit(unit1);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const {
     audioSrc,
     audioRef,
@@ -12,7 +28,9 @@ export default function PronunciationCourseUnit() {
     isLineFinished,
     handleAudioTogglePlayPause,
     lyricsUnitMeta,
-  } = useAudioPlayer(unit1);
+  } = useAudioPlayer(lyricsUnit);
+
+
   return (
     <div>
       {audioSrc ? (

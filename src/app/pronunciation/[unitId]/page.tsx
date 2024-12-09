@@ -1,17 +1,13 @@
 "use client";
 
-import PronunciationCourseUnit from "@/components/PronunciationCourseUnit";
 import { useParams } from "next/navigation";
+import PronunciationCourseUnit from "@/components/PronunciationCourseUnit";
 
 export default function PronunciationPage() {
   const { unitId } = useParams();
   return (
-    <>
-      {unitId === "unit1" && (
-        <div>
-          <PronunciationCourseUnit />
-        </div>
-      )}
-    </>
+    <div>
+      {unitId === "unit1" && <PronunciationCourseUnit />}
+    </div>
   );
 }
