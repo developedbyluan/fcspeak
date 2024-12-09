@@ -5,7 +5,7 @@ type LyricsDisplayProps = {
   currentLyric: Lyric | null;
   isPlaying: boolean;
   isLineFinished: boolean;
-  fontSize?: "small" | "medium" | "large";
+  fontSize?: "large" | "xl" | "2xl";
   showTranslation: boolean;
   showIPA: boolean;
 };
@@ -14,14 +14,14 @@ export default function SingleLyricDisplay({
   currentLyric,
   isPlaying,
   isLineFinished,
-  fontSize = "medium",
+  fontSize = "2xl",
   showTranslation,
   showIPA,
 }: LyricsDisplayProps) {
   const fontSizeClasses = {
-    small: "text-base",
-    medium: "text-lg",
-    large: "text-xl",
+    large: "text-lg",
+    xl: "text-xl",
+    "2xl": "text-2xl",
   };
   const getTextColorClass = () => {
     if (isPlaying) return "text-blue-600";
@@ -30,7 +30,7 @@ export default function SingleLyricDisplay({
   };
 
   return (
-    <div className="mt-6 space-y-4 p-4 rounded-lg bg-gray-50 transition-colors duration-200 hover:bg-gray-100">
+    <div className="mt-32 px-4">
       <div className="space-y-2">
         <p
           className={`font-medium ${
@@ -42,7 +42,7 @@ export default function SingleLyricDisplay({
         </p>
       </div>
 
-      <div className="space-y-2">
+      <div className="mt-4 space-y-2">
         {showTranslation && (
           <>
             <h3 className="text-sm font-medium text-gray-500">Translation</h3>
