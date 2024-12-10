@@ -5,6 +5,9 @@ import AudioFileInput from "@/components/AudioPlayer/AudioFileInput";
 import AutoPausePlayer from "../AutoPausePlayer";
 import { LyricsUnit } from "@/types/lyric";
 
+import { motion } from "framer-motion";
+import ProgressBar from "../AudioPlayer/ProgressBar";
+
 export default function PronunciationCourseUnit() {
   const [lyricsUnit, setLyricsUnit] = useState<LyricsUnit | null>(null);
   const [showTranslation, setShowTranslation] = useState<boolean>(false);
@@ -32,6 +35,7 @@ export default function PronunciationCourseUnit() {
     lyricsUnitMeta,
     currentLyricIndex,
     handleNextLine,
+    audioProgress,
   } = useAudioPlayer(lyricsUnit);
 
   const currentLyric = lyricsUnit?.lyrics[currentLyricIndex];
@@ -47,8 +51,9 @@ export default function PronunciationCourseUnit() {
   return (
     <div>
       {audioSrc && currentLyric ? (
-        <div>
+        <>
           <audio ref={audioRef} src={audioSrc} />
+          <ProgressBar audioProgress={audioProgress} />
           <AutoPausePlayer
             currentLyric={currentLyric}
             isPlaying={isPlaying}
@@ -60,7 +65,7 @@ export default function PronunciationCourseUnit() {
             onShowIPA={handleShowIPA}
             showIPA={showIPA}
           />
-        </div>
+        </>
       ) : (
         <AudioFileInput
           onAudioFileChange={handleAudioFileChange}

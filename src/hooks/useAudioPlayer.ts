@@ -9,6 +9,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const [lyricsUnitMeta, setLyricsUnitMeta] = useState<LyricsUnitMeta | null>(
     null
   );
+  const [audioProgress, setAudioProgress] = useState(0);
   const lineTimeOutRef = useRef<NodeJS.Timeout | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -21,6 +22,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   useEffect(() => {
     if (!lyricsUnit) return;
     handleAudioTogglePlayPause();
+    handleCalculateAudioProgress();
   }, [currentLyricIndex]);
 
   const handleAudioFileChange = (
@@ -91,6 +93,14 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     }
     setIsLineFinished(false);
   };
+  const handleCalculateAudioProgress = () => {
+    if (!lyricsUnit) return;
+    const audioElement = audioRef.current;
+    if (!audioElement) return;
+    const audioDuration = audioElement.duration;
+    const progress = (audioElement.currentTime / audioDuration) * 100;
+    setAudioProgress(progress);
+  };
 
   return {
     audioSrc,
@@ -103,5 +113,6 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     currentLyricIndex,
     handleLineFinished,
     handleNextLine,
+    audioProgress,
   };
 }
