@@ -36,6 +36,8 @@ export default function PronunciationCourseUnit() {
     currentLyricIndex,
     handleNextLine,
     audioProgress,
+    gotoPreviousSessionLine,
+    lyricProgress,
   } = useAudioPlayer(lyricsUnit);
 
   const currentLyric = lyricsUnit?.lyrics[currentLyricIndex];
@@ -64,6 +66,8 @@ export default function PronunciationCourseUnit() {
             showTranslation={showTranslation}
             onShowIPA={handleShowIPA}
             showIPA={showIPA}
+            onGotoPreviousSessionLine={gotoPreviousSessionLine}
+            lyricProgress={lyricProgress}
           />
         </>
       ) : (

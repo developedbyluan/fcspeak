@@ -12,6 +12,11 @@ type AutoPausePlayerProps = {
   showTranslation: boolean;
   onShowIPA: () => void;
   showIPA: boolean;
+  onGotoPreviousSessionLine: () => void;
+  lyricProgress: {
+    currentLine: number;
+    totalLines: number;
+  };
 };
 
 export default function AutoPausePlayer({
@@ -24,6 +29,8 @@ export default function AutoPausePlayer({
   showTranslation,
   onShowIPA,
   showIPA,
+  onGotoPreviousSessionLine,
+  lyricProgress,
 }: AutoPausePlayerProps) {
   return (
     <div>
@@ -31,6 +38,7 @@ export default function AutoPausePlayer({
         currentLyric={currentLyric}
         showTranslation={showTranslation}
         showIPA={showIPA}
+        lyricProgress={lyricProgress}
       />
       <AudioControls
         isPlaying={isPlaying}
@@ -41,6 +49,7 @@ export default function AutoPausePlayer({
         showTranslation={showTranslation}
         onShowIPA={onShowIPA}
         showIPA={showIPA}
+        onGotoPreviousSessionLine={onGotoPreviousSessionLine}
       />
     </div>
   );

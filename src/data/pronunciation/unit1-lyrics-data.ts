@@ -7,6 +7,7 @@ export const unit1: LyricsUnit = {
       "Explain in more detail the Effortless English Pronunciation method.",
     fileName: "Unit1.mp3",
     course: "Pronunciation Course",
+    slug: "unit1",
   },
   lyrics: [
     {

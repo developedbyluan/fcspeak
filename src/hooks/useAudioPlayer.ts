@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { LyricsUnit, LyricsUnitMeta } from "@/types/lyric";
 import { useToast } from "@/hooks/use-toast";
 
+let logsName: string;
+
 export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const [audioSrc, setAudioSrc] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -14,19 +16,39 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const lineTimeOutRef = useRef<NodeJS.Timeout | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [lyricProgress, setLyricProgress] = useState({
+    currentLine: 0,
+    totalLines: 0,
+  });
 
   const { toast } = useToast();
 
   useEffect(() => {
     if (!lyricsUnit) return;
     setLyricsUnitMeta(lyricsUnit.meta);
+    logsName = `${lyricsUnit.meta.slug}-pronunciation-course-logs`;
+
+    setLyricProgress({
+      currentLine: 1,
+      totalLines: lyricsUnit.lyrics.length,
+    });
   }, [lyricsUnit]);
 
   useEffect(() => {
     if (!lyricsUnit) return;
     handleAudioTogglePlayPause();
     handleCalculateAudioProgress();
+
+    setLyricProgress({
+      currentLine: currentLyricIndex + 1,
+      totalLines: lyricsUnit.lyrics.length,
+    });
   }, [currentLyricIndex]);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    handleSaveUnitPronunciationCourseLog();
+  }, [isPlaying]);
 
   const handleAudioFileChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -51,7 +73,6 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
         }
       }
     } catch (error) {
-      console.error("The catched error:", (error as Error).message);
       toast({
         title: "Error",
         description:
@@ -101,7 +122,6 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   };
 
   const handleNextLine = () => {
-    console.log("handleNextLine");
     if (!lyricsUnit) return;
     if (currentLyricIndex === lyricsUnit.lyrics.length - 1) {
       setCurrentLyricIndex(0);
@@ -120,6 +140,39 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     setAudioProgress(progress);
   };
 
+  const handleSaveUnitPronunciationCourseLog = () => {
+    if (!lyricsUnit) return;
+    const pronunciationLogs = localStorage.getItem(logsName);
+    if (!pronunciationLogs) {
+      localStorage.setItem(
+        logsName,
+        JSON.stringify({ [lyricsUnit.meta.slug]: { currentIndex: 0 } })
+      );
+      return;
+    }
+    const pronunciationLogsObj = JSON.parse(pronunciationLogs);
+    pronunciationLogsObj[lyricsUnit.meta.slug].currentIndex = currentLyricIndex;
+    localStorage.setItem(logsName, JSON.stringify(pronunciationLogsObj));
+  };
+
+  const gotoPreviousSessionLine = () => {
+    if (!lyricsUnit) return;
+    const pronunciationLogs = localStorage.getItem(logsName);
+    if (!pronunciationLogs) {
+      toast({
+        title: "Error",
+        description: "No pronunciation logs found",
+        variant: "destructive",
+      });
+      return;
+    }
+    const pronunciationLogsObj = JSON.parse(pronunciationLogs);
+    const currentIndex =
+      pronunciationLogsObj[lyricsUnit.meta.slug].currentIndex;
+    setCurrentLyricIndex(currentIndex);
+    setIsLineFinished(false);
+  };
+
   return {
     audioSrc,
     audioRef,
@@ -132,5 +185,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     handleLineFinished,
     handleNextLine,
     audioProgress,
+    gotoPreviousSessionLine,
+    lyricProgress,
   };
 }

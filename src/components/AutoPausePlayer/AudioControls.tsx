@@ -1,5 +1,6 @@
 "use client";
 import {
+  CalendarSync,
   ChevronDown,
   Languages,
   LucidePlay,
@@ -9,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 
 type AudioControlsProps = {
   isPlaying: boolean;
@@ -20,7 +22,8 @@ type AudioControlsProps = {
   showTranslation: boolean;
   onShowIPA: () => void;
   showIPA: boolean;
-}
+  onGotoPreviousSessionLine: () => void;
+};
 
 export default function AudioControls({
   isPlaying,
@@ -32,21 +35,36 @@ export default function AudioControls({
   showTranslation,
   onShowIPA,
   showIPA,
+  onGotoPreviousSessionLine,
 }: AudioControlsProps) {
+  const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
   return (
     <AnimatePresence>
       {!isPlaying ? (
         <>
-          <motion.button
+          <motion.div
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 0.5 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed top-3 left-1 px-4 py-3 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
+            className="fixed top-3 left-1 flex items-center gap-7 px-4 py-3 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
           >
-            <ChevronDown stroke="white" size={32} />
-          </motion.button>
+            <button aria-label="Hide the AutoPause player" onClick={() => {}}>
+              <ChevronDown stroke="white" size={32} />
+            </button>
+            {!isSynced && (
+              <button
+                onClick={() => {
+                  onGotoPreviousSessionLine();
+                  setIsSynced(true);
+                }}
+                aria-label="Go to previous session line"
+              >
+                <CalendarSync stroke="white" strokeWidth={0.75} size={32} />
+              </button>
+            )}
+          </motion.div>
           <motion.div
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 0.5 }}
