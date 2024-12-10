@@ -1,5 +1,6 @@
 import { Lyric } from "@/types/lyric";
 import { cn } from "@/lib/utils";
+import WordIPADisplay from "../WordIPADisplay";
 
 type LyricsDisplayProps = {
   currentLyric: Lyric | null;
@@ -10,49 +11,43 @@ type LyricsDisplayProps = {
 
 export default function SingleLyricDisplay({
   currentLyric,
-  fontSize = "3xl",
   showTranslation,
   showIPA,
 }: LyricsDisplayProps) {
-  const fontSizeClasses = {
-    large: "text-lg",
-    xl: "text-xl",
-    "2xl": "text-2xl",
-    "3xl": "text-3xl leading-loose",
+
+  const convertLyricToWordIPA = (lyric: Lyric) => {
+    const {text, ipa} = lyric;
+    const words = text.split(" ");
+    const ipaWords = ipa.split(" ");
+    const wordIPAs = words.map((word, index) => ({
+      id: index,
+      text: word,
+      ipa: ipaWords[index],
+    }));
+
+    return wordIPAs;
   };
 
   return (
     <div className="mt-32 px-4">
       <div className="space-y-2">
-        <p className={`font-medium ${fontSizeClasses[fontSize]}`}>
-          {currentLyric?.text}
-        </p>
+        {currentLyric && (
+          <WordIPADisplay
+            wordIPAs={convertLyricToWordIPA(currentLyric)}
+            showIPA={showIPA}
+          />
+        )}
       </div>
 
       <div className="mt-4 space-y-2">
         {showTranslation && (
           <>
             <h3 className="text-sm font-medium text-gray-500">Translation</h3>
-            <p
-              className={cn(
-                "text-gray-700",
-                fontSize === "large" ? "text-lg" : "text-base"
-              )}
-            >
-              {currentLyric?.translation}
-            </p>
+            <p className="text-gray-700">{currentLyric?.translation}</p>
           </>
         )}
       </div>
 
-      <div className="space-y-2">
-        {showIPA && (
-          <>
-            <h3 className="text-sm font-medium text-gray-500">IPA</h3>
-            <p className="text-gray-700">{currentLyric?.ipa}</p>
-          </>
-        )}
-      </div>
     </div>
   );
 }
