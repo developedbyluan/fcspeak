@@ -12,6 +12,7 @@ type AutoPausePlayerProps = {
   showTranslation: boolean;
   onShowIPA: () => void;
   showIPA: boolean;
+  onGotoPreviousSessionLine: () => void;
 };
 
 export default function AutoPausePlayer({
@@ -24,6 +25,7 @@ export default function AutoPausePlayer({
   showTranslation,
   onShowIPA,
   showIPA,
+  onGotoPreviousSessionLine,
 }: AutoPausePlayerProps) {
   return (
     <div>
@@ -41,6 +43,7 @@ export default function AutoPausePlayer({
         showTranslation={showTranslation}
         onShowIPA={onShowIPA}
         showIPA={showIPA}
+        onGotoPreviousSessionLine={onGotoPreviousSessionLine}
       />
     </div>
   );
