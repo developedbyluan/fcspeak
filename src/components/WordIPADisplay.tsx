@@ -1,15 +1,5 @@
 import { cn } from "@/lib/utils";
-type WordIPA = {
-  id: number;
-  text: string;
-  ipa: string;
-};
-
-type WordIPADisplayProps = {
-  wordIPAs: WordIPA[];
-  fontSize?: "large" | "xl" | "2xl" | "3xl";
-  showIPA?: boolean;
-};
+import { WordIPA, WordIPADisplayProps} from "@/types/word"
 
 export default function WordIPADisplay({
   wordIPAs,
