@@ -14,6 +14,7 @@ type LyricsUnitMeta = {
   title: string;
   description: string;
   fileName: string;
+  course: string;
 };
 
 type LyricsUnit = {
