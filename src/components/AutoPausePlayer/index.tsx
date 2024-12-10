@@ -29,8 +29,6 @@ export default function AutoPausePlayer({
     <div>
       <SingleLyricDisplay
         currentLyric={currentLyric}
-        isPlaying={isPlaying}
-        isLineFinished={isLineFinished}
         showTranslation={showTranslation}
         showIPA={showIPA}
       />
