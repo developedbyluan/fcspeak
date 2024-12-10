@@ -3,18 +3,14 @@ import { cn } from "@/lib/utils";
 
 type LyricsDisplayProps = {
   currentLyric: Lyric | null;
-  isPlaying: boolean;
-  isLineFinished: boolean;
-  fontSize?: "large" | "xl" | "2xl";
+  fontSize?: "large" | "xl" | "2xl" | "3xl";
   showTranslation: boolean;
   showIPA: boolean;
 };
 
 export default function SingleLyricDisplay({
   currentLyric,
-  isPlaying,
-  isLineFinished,
-  fontSize = "2xl",
+  fontSize = "3xl",
   showTranslation,
   showIPA,
 }: LyricsDisplayProps) {
@@ -22,22 +18,13 @@ export default function SingleLyricDisplay({
     large: "text-lg",
     xl: "text-xl",
     "2xl": "text-2xl",
-  };
-  const getTextColorClass = () => {
-    if (isPlaying) return "text-blue-600";
-    if (isLineFinished) return "text-green-600";
-    return "text-gray-900";
+    "3xl": "text-3xl leading-loose",
   };
 
   return (
     <div className="mt-32 px-4">
       <div className="space-y-2">
-        <p
-          className={`font-medium ${
-            fontSizeClasses[fontSize]
-          } ${getTextColorClass()} 
-          transition-colors duration-200`}
-        >
+        <p className={`font-medium ${fontSizeClasses[fontSize]}`}>
           {currentLyric?.text}
         </p>
       </div>
