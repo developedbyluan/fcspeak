@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { LyricsUnit, LyricsUnitMeta } from "@/types/lyric";
+import { useToast } from "@/hooks/use-toast";
 
 export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const [audioSrc, setAudioSrc] = useState<string | null>(null);
@@ -13,6 +14,8 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const lineTimeOutRef = useRef<NodeJS.Timeout | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!lyricsUnit) return;
@@ -29,20 +32,34 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (!lyricsUnit) return;
-
-    const file = event.target.files?.[0];
-    if (file && file.type === "audio/mpeg") {
-      const objectUrl = URL.createObjectURL(file);
-      setAudioSrc(objectUrl);
-
-      setIsPlaying(false);
-      setCurrentLyricIndex(0);
-      setIsLineFinished(false);
-
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+    try {
+      const file = event.target.files?.[0];
+      if (file && file.name !== lyricsUnitMeta?.fileName) {
+        throw new Error("File name does not match");
       }
+      if (file && file.type === "audio/mpeg") {
+        const objectUrl = URL.createObjectURL(file);
+        setAudioSrc(objectUrl);
+
+        setIsPlaying(false);
+        setCurrentLyricIndex(0);
+        setIsLineFinished(false);
+
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        }
+      }
+    } catch (error) {
+      console.error("The catched error:", (error as Error).message);
+      toast({
+        title: "Error",
+        description:
+          (error as Error).message +
+          ".\nPlease upload the audio file " +
+          lyricsUnitMeta?.fileName,
+        variant: "destructive",
+      });
     }
   };
 
@@ -93,6 +110,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     }
     setIsLineFinished(false);
   };
+
   const handleCalculateAudioProgress = () => {
     if (!lyricsUnit) return;
     const audioElement = audioRef.current;

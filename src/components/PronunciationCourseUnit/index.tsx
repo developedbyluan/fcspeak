@@ -5,7 +5,6 @@ import AudioFileInput from "@/components/AudioPlayer/AudioFileInput";
 import AutoPausePlayer from "../AutoPausePlayer";
 import { LyricsUnit } from "@/types/lyric";
 
-import { motion } from "framer-motion";
 import ProgressBar from "../AudioPlayer/ProgressBar";
 
 export default function PronunciationCourseUnit() {
@@ -67,10 +66,14 @@ export default function PronunciationCourseUnit() {
           />
         </>
       ) : (
-        <AudioFileInput
-          onAudioFileChange={handleAudioFileChange}
-          lyricsUnitMeta={lyricsUnitMeta}
-        />
+        <div className="flex flex-col items-center justify-center min-h-svh">
+          {lyricsUnitMeta && (
+            <AudioFileInput
+              onAudioFileChange={handleAudioFileChange}
+              lyricsUnitMeta={lyricsUnitMeta}
+            />
+          )}
+        </div>
       )}
     </div>
   );

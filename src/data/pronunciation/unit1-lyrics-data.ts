@@ -2,9 +2,11 @@ import { LyricsUnit } from "@/types/lyric";
 
 export const unit1: LyricsUnit = {
   meta: {
-    title: "Unit 1",
-    description: "Unit 1 description",
+    title: "Unit 1: Pronunciation",
+    description:
+      "Explain in more detail the Effortless English Pronunciation method.",
     fileName: "Unit1.mp3",
+    course: "Pronunciation Course",
   },
   lyrics: [
     {
