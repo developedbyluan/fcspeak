@@ -16,6 +16,10 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const lineTimeOutRef = useRef<NodeJS.Timeout | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [lyricProgress, setLyricProgress] = useState({
+    currentLine: 0,
+    totalLines: 0,
+  });
 
   const { toast } = useToast();
 
@@ -23,12 +27,22 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     if (!lyricsUnit) return;
     setLyricsUnitMeta(lyricsUnit.meta);
     logsName = `${lyricsUnit.meta.slug}-pronunciation-course-logs`;
+
+    setLyricProgress({
+      currentLine: 1,
+      totalLines: lyricsUnit.lyrics.length,
+    });
   }, [lyricsUnit]);
 
   useEffect(() => {
     if (!lyricsUnit) return;
     handleAudioTogglePlayPause();
     handleCalculateAudioProgress();
+
+    setLyricProgress({
+      currentLine: currentLyricIndex + 1,
+      totalLines: lyricsUnit.lyrics.length,
+    });
   }, [currentLyricIndex]);
 
   useEffect(() => {
@@ -172,5 +186,6 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     handleNextLine,
     audioProgress,
     gotoPreviousSessionLine,
+    lyricProgress,
   };
 }

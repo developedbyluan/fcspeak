@@ -1,21 +1,24 @@
 import { Lyric } from "@/types/lyric";
-import { cn } from "@/lib/utils";
 import WordIPADisplay from "../WordIPADisplay";
 
 type LyricsDisplayProps = {
   currentLyric: Lyric | null;
   showTranslation: boolean;
   showIPA: boolean;
+  lyricProgress: {
+    currentLine: number;
+    totalLines: number;
+  };
 };
 
 export default function SingleLyricDisplay({
   currentLyric,
   showTranslation,
   showIPA,
+  lyricProgress,
 }: LyricsDisplayProps) {
-
   const convertLyricToWordIPA = (lyric: Lyric) => {
-    const {text, ipa} = lyric;
+    const { text, ipa } = lyric;
     const words = text.split(" ");
     const ipaWords = ipa.split(" ");
     const wordIPAs = words.map((word, index) => ({
@@ -29,6 +32,11 @@ export default function SingleLyricDisplay({
 
   return (
     <div className="mt-32 px-4">
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-sm text-gray-500">
+          {lyricProgress.currentLine} / {lyricProgress.totalLines}
+        </p>
+      </div>
       <div className="space-y-2">
         {currentLyric && (
           <WordIPADisplay
@@ -46,7 +54,6 @@ export default function SingleLyricDisplay({
           </>
         )}
       </div>
-
     </div>
   );
 }
