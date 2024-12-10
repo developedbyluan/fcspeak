@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
 import { unit1 } from "@/data/pronunciation/unit1-lyrics-data";
 import AudioFileInput from "@/components/AudioPlayer/AudioFileInput";
+import { AudioFileInputSkeleton } from "@/components/AudioPlayer/AudioFileInputSkeleton";
 import AutoPausePlayer from "../AutoPausePlayer";
 import { LyricsUnit } from "@/types/lyric";
 
@@ -67,11 +68,13 @@ export default function PronunciationCourseUnit() {
         </>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-svh">
-          {lyricsUnitMeta && (
+          {lyricsUnitMeta ? (
             <AudioFileInput
               onAudioFileChange={handleAudioFileChange}
               lyricsUnitMeta={lyricsUnitMeta}
             />
+          ) : (
+            <AudioFileInputSkeleton />
           )}
         </div>
       )}

@@ -25,7 +25,7 @@ export default function AudioFileInput({
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Card className="w-3/4 max-w-md mx-auto mt-10 bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-950 border-2 border-neutral-200 dark:border-neutral-800">
+    <Card className="w-3/4 max-w-md mx-auto mt-10 bg-gradient-to-br from-neutral-50 to-neutral-100 border-2 border-neutral-200">
       <CardHeader>
         <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">
           {lyricsUnitMeta?.course}
