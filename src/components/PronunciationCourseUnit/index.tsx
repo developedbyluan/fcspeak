@@ -38,6 +38,7 @@ export default function PronunciationCourseUnit() {
     audioProgress,
     gotoPreviousSessionLine,
     lyricProgress,
+    isLessonFinished,
   } = useAudioPlayer(lyricsUnit);
 
   const currentLyric = lyricsUnit?.lyrics[currentLyricIndex];
@@ -51,37 +52,43 @@ export default function PronunciationCourseUnit() {
   };
 
   return (
-    <div>
-      {audioSrc && currentLyric ? (
-        <>
-          <audio ref={audioRef} src={audioSrc} />
-          <ProgressBar audioProgress={audioProgress} />
-          <AutoPausePlayer
-            currentLyric={currentLyric}
-            isPlaying={isPlaying}
-            isLineFinished={isLineFinished}
-            onTogglePlayPause={handleAudioTogglePlayPause}
-            onNextLine={handleNextLine}
-            onShowTranslation={handleShowTranslation}
-            showTranslation={showTranslation}
-            onShowIPA={handleShowIPA}
-            showIPA={showIPA}
-            onGotoPreviousSessionLine={gotoPreviousSessionLine}
-            lyricProgress={lyricProgress}
-          />
-        </>
-      ) : (
-        <div className="flex flex-col items-center justify-center min-h-svh">
-          {lyricsUnitMeta ? (
-            <AudioFileInput
-              onAudioFileChange={handleAudioFileChange}
-              lyricsUnitMeta={lyricsUnitMeta}
-            />
+    <>
+      {!isLessonFinished ? (
+        <div>
+          {audioSrc && currentLyric ? (
+            <>
+              <audio ref={audioRef} src={audioSrc} />
+              <ProgressBar audioProgress={audioProgress} />
+              <AutoPausePlayer
+                currentLyric={currentLyric}
+                isPlaying={isPlaying}
+                isLineFinished={isLineFinished}
+                onTogglePlayPause={handleAudioTogglePlayPause}
+                onNextLine={handleNextLine}
+                onShowTranslation={handleShowTranslation}
+                showTranslation={showTranslation}
+                onShowIPA={handleShowIPA}
+                showIPA={showIPA}
+                onGotoPreviousSessionLine={gotoPreviousSessionLine}
+                lyricProgress={lyricProgress}
+              />
+            </>
           ) : (
-            <AudioFileInputSkeleton />
+            <div className="flex flex-col items-center justify-center min-h-svh">
+              {lyricsUnitMeta ? (
+                <AudioFileInput
+                  onAudioFileChange={handleAudioFileChange}
+                  lyricsUnitMeta={lyricsUnitMeta}
+                />
+              ) : (
+                <AudioFileInputSkeleton />
+              )}
+            </div>
           )}
         </div>
+      ) : (
+        <div>Lesson finished</div>
       )}
-    </div>
+    </>
   );
 }
