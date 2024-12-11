@@ -7,6 +7,9 @@ import AutoPausePlayer from "../AutoPausePlayer";
 import { LyricsUnit } from "@/types/lyric";
 
 import ProgressBar from "../AudioPlayer/ProgressBar";
+import LessonComplete from "./LessonComplete";
+import { Button } from "@/components/ui/button";
+import { CheckIcon } from "lucide-react";
 
 export default function PronunciationCourseUnit() {
   const [lyricsUnit, setLyricsUnit] = useState<LyricsUnit | null>(null);
@@ -38,6 +41,8 @@ export default function PronunciationCourseUnit() {
     audioProgress,
     gotoPreviousSessionLine,
     lyricProgress,
+    isCurrentProgressFull,
+    setIsLessonFinished,
     isLessonFinished,
   } = useAudioPlayer(lyricsUnit);
 
@@ -72,6 +77,15 @@ export default function PronunciationCourseUnit() {
                 onGotoPreviousSessionLine={gotoPreviousSessionLine}
                 lyricProgress={lyricProgress}
               />
+              {isCurrentProgressFull && !isPlaying && (
+                <Button
+                  onClick={() => setIsLessonFinished(true)}
+                  className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                >
+                  <CheckIcon className="w-4 h-4" />
+                  Finish Lesson
+                </Button>
+              )}
             </>
           ) : (
             <div className="flex flex-col items-center justify-center min-h-svh">
@@ -87,7 +101,7 @@ export default function PronunciationCourseUnit() {
           )}
         </div>
       ) : (
-        <div>Lesson finished</div>
+        <LessonComplete />
       )}
     </>
   );
