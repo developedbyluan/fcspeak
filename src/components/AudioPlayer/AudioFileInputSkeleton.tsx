@@ -19,7 +19,7 @@ export function AudioFileInputSkeleton() {
         </div>
 
         {/* Button skeleton */}
-        <Skeleton className="h-8 w-full mt-6" />
+        <Skeleton className="h-8 w-5/6 mt-10 mx-auto" />
       </div>
     </div>
   );
