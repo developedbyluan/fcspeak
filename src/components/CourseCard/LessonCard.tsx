@@ -3,6 +3,9 @@ import { Lesson } from "@/types/lesson";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { BarChart2 } from "lucide-react";
+import { Button } from "../ui/button";
 
 type LessonCardProps = {
   lesson: Lesson;
@@ -16,13 +19,18 @@ export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
     router.push(`/pronunciation/unit${lesson.id}`);
   };
 
+  const handleStatsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    router.push(`/pronunciation/unit${lesson.id}/stats`);
+  };
+
   return (
-    <>
+    <div className="relative">
       <Card
         key={lesson.id}
         className={cn(
           "w-full cursor-pointer transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[1] active:shadow-none",
-          isVertical ? "w-full" : "w-[250px] shrink-0",
+          isVertical ? "w-full" : "w-[250px] shrink-0"
         )}
         onClick={handleLessonCardClick}
         role="button"
@@ -58,6 +66,16 @@ export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
           </div>
         </CardContent>
       </Card>
-    </>
+      <Link
+        className="absolute bottom-2 right-2"
+        href={`/pronunciation/unit${lesson.id}/stats`}
+        passHref
+      >
+        <Button variant="outline" size="sm" className="mt-2">
+          <BarChart2 className="h-4 w-4 mr-2" />
+          View Stats
+        </Button>
+      </Link>
+    </div>
   );
 }
