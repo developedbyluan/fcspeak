@@ -201,7 +201,6 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     }
 
     const pronunciationLogsObj = JSON.parse(pronunciationLogs);
-    // TODO: update the currentProgress
     if (isLineFinished) {
       pronunciationLogsObj[lyricsUnit.meta.slug].currentIndex =
         currentLyricIndex;
@@ -210,35 +209,12 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
       ] += 1;
     }
 
-    // TODO: update the logs
     const isCurrentProgressFull = pronunciationLogsObj[
       lyricsUnit.meta.slug
     ].currentProgress.every((progress: number) => progress >= 1);
     if (isCurrentProgressFull) {
       setIsCurrentProgressFull(true);
     }
-    // TODO: update the currentProgress
-    // if (isCurrentProgressFull) {
-    //   const lastLogDayNumber = Number(Object.keys(lastLogDay)[0]);
-    //   const lastLogDate = lastLogDay[lastLogDayNumber].date;
-    //   const currentProgress =
-    //     pronunciationLogsObj[lyricsUnit.meta.slug].currentProgress;
-
-    //   if (lastLogDate !== today) {
-    //     pronunciationLogsObj[lyricsUnit.meta.slug].logs.push({
-    //       [lastLogDayNumber + 1]: {
-    //         reps: currentProgress,
-    //         dayName: dayName,
-    //         date: today,
-    //       },
-    //     });
-    //   } else {
-    //     lastLogDay[lastLogDayNumber].reps.push(currentProgress);
-    //   }
-    //   pronunciationLogsObj[lyricsUnit.meta.slug].currentIndex = 0;
-    //   pronunciationLogsObj[lyricsUnit.meta.slug].currentProgress = zeroes;
-    //   setIsLessonFinished(true);
-    // }
 
     localStorage.setItem(logsName, JSON.stringify(pronunciationLogsObj));
   };
