@@ -206,6 +206,15 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
       if (!audioElement) return;
       audioElement.pause();
       setIsPlaying(false);
+      if (!isAutoPauseOn) {
+        updateCurrentProgressToLocalStorage(lyricsUnit);
+        setCurrentProgress((prev) => {
+          const newProgress = [...prev];
+          newProgress[currentLyricIndex] += 1;
+          return newProgress;
+        });
+        setIsCurrentProgressFull(true);
+      }
     } else {
       if (!isAutoPauseOn) {
         updateCurrentProgressToLocalStorage(lyricsUnit);
