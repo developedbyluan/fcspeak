@@ -32,6 +32,8 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const [showAutoPausePlayer, setShowAutoPausePlayer] = useState(true);
   const [isAutoPauseOn, setIsAutoPauseOn] = useState(false);
 
+  const [currentProgress, setCurrentProgress] = useState<number[]>([]);
+
   const { toast } = useToast();
 
   useEffect(() => {
@@ -46,6 +48,15 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     });
 
     addLessonMetaToContinueTrainingHistoryInLocalStorage(lyricsUnit.meta.slug);
+
+    // TODO: get current progress from local storage
+    const unitPronunciationLogs = localStorage.getItem(logsName);
+    if (unitPronunciationLogs) {
+      const unitPronunciationLogsObj = JSON.parse(unitPronunciationLogs);
+      const currentProgress =
+        unitPronunciationLogsObj[lyricsUnit.meta.slug].currentProgress;
+      setCurrentProgress(currentProgress);
+    }
   }, [lyricsUnit]);
 
   useEffect(() => {
@@ -60,8 +71,14 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   }, [currentLyricIndex]);
 
   useEffect(() => {
+    console.log("1. isLineFinished", isLineFinished);
     if (!isLineFinished) return;
     handleSaveUnitPronunciationCourseLog();
+    setCurrentProgress((prev) => {
+      const newProgress = [...prev];
+      newProgress[currentLyricIndex] += 1;
+      return newProgress;
+    });
   }, [isLineFinished]);
 
   useEffect(() => {
@@ -170,6 +187,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     const lineDuration = endTime - startTime;
 
     lineTimeOutRef.current = setTimeout(() => {
+      console.log("handleLineFinished");
       audioElement.pause();
       setIsPlaying(false);
       setIsLineFinished(true);
@@ -186,6 +204,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     } else {
       setCurrentLyricIndex((prevIndex) => prevIndex + 1);
     }
+
     setIsLineFinished(false);
   };
 
@@ -357,5 +376,6 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     setCurrentLyricIndex,
     isAutoPauseOn,
     handleAutoPause,
+    currentProgress,
   };
 }
