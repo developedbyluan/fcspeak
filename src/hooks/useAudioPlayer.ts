@@ -200,7 +200,10 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const handleNextLine = () => {
     if (!lyricsUnit) return;
     if (currentLyricIndex === lyricsUnit.lyrics.length - 1) {
-      setCurrentLyricIndex(0);
+      const audioElement = audioRef.current;
+      if (!audioElement) return;
+      audioElement.pause();
+      setIsPlaying(false);
     } else {
       setCurrentLyricIndex((prevIndex) => prevIndex + 1);
     }

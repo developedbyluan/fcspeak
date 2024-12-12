@@ -12,6 +12,7 @@ import {
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 
 type AudioControlsProps = {
   isPlaying: boolean;
@@ -46,6 +47,7 @@ export default function AudioControls({
 }: AudioControlsProps) {
   const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
+
   return (
     <AnimatePresence>
       {!isPlaying ? (

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
 
 import LyricsDisplay from "../LyricsDisplay";
+import { toast } from "@/hooks/use-toast";
 
 export default function PronunciationCourseUnit() {
   const [lyricsUnit, setLyricsUnit] = useState<LyricsUnit | null>(null);
@@ -73,6 +74,17 @@ export default function PronunciationCourseUnit() {
     setCurrentLyricIndex(index);
   };
 
+  const handleNextLineWithToast = () => {
+    if (!lyricsUnit) return;
+    if (currentLyricIndex === lyricsUnit?.lyrics.length - 1) {
+      toast({
+        description: "This is the last line of the lesson!",
+        variant: "destructive",
+      });
+    }
+    handleNextLine();
+  };
+
   return (
     <>
       {!isLessonFinished ? (
@@ -87,7 +99,7 @@ export default function PronunciationCourseUnit() {
                   isPlaying={isPlaying}
                   isLineFinished={isLineFinished}
                   onTogglePlayPause={handleAudioTogglePlayPause}
-                  onNextLine={handleNextLine}
+                  onNextLine={handleNextLineWithToast}
                   onShowTranslation={handleShowTranslation}
                   showTranslation={showTranslation}
                   onShowIPA={handleShowIPA}
