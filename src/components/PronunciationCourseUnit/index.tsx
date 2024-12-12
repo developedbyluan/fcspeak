@@ -50,6 +50,8 @@ export default function PronunciationCourseUnit() {
     showAutoPausePlayer,
     setShowAutoPausePlayer,
     setCurrentLyricIndex,
+    isAutoPauseOn,
+    handleAutoPause,
   } = useAudioPlayer(lyricsUnit);
 
   const currentLyric = lyricsUnit?.lyrics[currentLyricIndex];
@@ -92,6 +94,8 @@ export default function PronunciationCourseUnit() {
                   onGotoPreviousSessionLine={gotoPreviousSessionLine}
                   lyricProgress={lyricProgress}
                   onHideAutoPausePlayer={handleHideAutoPausePlayer}
+                  isAutoPauseOn={isAutoPauseOn}
+                  handleAutoPause={handleAutoPause}
                 />
               ) : (
                 <LyricsDisplay

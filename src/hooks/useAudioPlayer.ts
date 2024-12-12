@@ -30,6 +30,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
 
   const lyricRefs = useRef<HTMLDivElement[]>([]);
   const [showAutoPausePlayer, setShowAutoPausePlayer] = useState(true);
+  const [isAutoPauseOn, setIsAutoPauseOn] = useState(false);
 
   const { toast } = useToast();
 
@@ -172,6 +173,9 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
       audioElement.pause();
       setIsPlaying(false);
       setIsLineFinished(true);
+      if (!isAutoPauseOn) {
+        handleNextLine();
+      }
     }, lineDuration * 1000);
   };
 
@@ -326,6 +330,10 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     }
   };
 
+  const handleAutoPause = () => {
+    setIsAutoPauseOn((prev) => !prev);
+  };
+
   return {
     audioSrc,
     audioRef,
@@ -347,5 +355,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     showAutoPausePlayer,
     setShowAutoPausePlayer,
     setCurrentLyricIndex,
+    isAutoPauseOn,
+    handleAutoPause,
   };
 }
