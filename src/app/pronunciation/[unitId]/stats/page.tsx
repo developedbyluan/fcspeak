@@ -29,6 +29,8 @@ import {
   CardContent,
 } from "@/components/ui/card";
 
+export const runtime = "edge";
+
 export default function StatsPage() {
   const pathname = usePathname();
   const unitId = pathname.split("/")[2];

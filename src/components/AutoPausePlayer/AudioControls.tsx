@@ -23,6 +23,7 @@ type AudioControlsProps = {
   onShowIPA: () => void;
   showIPA: boolean;
   onGotoPreviousSessionLine: () => void;
+  onHideAutoPausePlayer: () => void;
 };
 
 export default function AudioControls({
@@ -36,6 +37,7 @@ export default function AudioControls({
   onShowIPA,
   showIPA,
   onGotoPreviousSessionLine,
+  onHideAutoPausePlayer,
 }: AudioControlsProps) {
   const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
@@ -48,13 +50,18 @@ export default function AudioControls({
             animate={{ y: 0, opacity: 0.5 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed top-3 left-1 flex items-center gap-7 px-4 py-3 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
+            className="fixed top-3 left-1 flex items-center gap-2 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
           >
-            <button aria-label="Hide the AutoPause player" onClick={() => {}}>
+            <button
+              className="pl-4 pr-4 py-3"
+              aria-label="Hide the AutoPause player"
+              onClick={onHideAutoPausePlayer}
+            >
               <ChevronDown stroke="white" size={32} />
             </button>
             {!isSynced && (
               <button
+                className="pl-4 pr-4 py-3 bg-zinc-700 rounded-tr-xl rounded-br-xl"
                 onClick={() => {
                   onGotoPreviousSessionLine();
                   setIsSynced(true);

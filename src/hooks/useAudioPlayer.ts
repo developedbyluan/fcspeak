@@ -28,6 +28,9 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const [isCurrentProgressFull, setIsCurrentProgressFull] = useState(false);
   const [isLessonFinished, setIsLessonFinished] = useState(false);
 
+  const lyricRefs = useRef<HTMLDivElement[]>([]);
+  const [showAutoPausePlayer, setShowAutoPausePlayer] = useState(true);
+
   const { toast } = useToast();
 
   useEffect(() => {
@@ -90,6 +93,15 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     pronunciationLogsObj[lyricsUnit.meta.slug].currentProgress = zeroes;
     localStorage.setItem(logsName, JSON.stringify(pronunciationLogsObj));
   }, [isLessonFinished, isCurrentProgressFull]);
+
+  useEffect(() => {
+    if (!lyricsUnit) return;
+    if (showAutoPausePlayer) return;
+    lyricRefs.current[currentLyricIndex].scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }, [currentLyricIndex, showAutoPausePlayer]);
 
   const handleAudioFileChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -331,5 +343,9 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     isCurrentProgressFull,
     setIsLessonFinished,
     isLessonFinished,
+    lyricRefs,
+    showAutoPausePlayer,
+    setShowAutoPausePlayer,
+    setCurrentLyricIndex,
   };
 }
