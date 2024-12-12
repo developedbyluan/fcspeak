@@ -19,6 +19,7 @@ export default function PronunciationCourseUnit() {
   const [showTranslation, setShowTranslation] = useState<boolean>(false);
   const [showIPA, setShowIPA] = useState<boolean>(false);
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -147,7 +148,7 @@ export default function PronunciationCourseUnit() {
           )}
         </div>
       ) : (
-        <LessonComplete />
+        <LessonComplete unitId={lyricsUnitMeta?.slug || ''} />
       )}
     </>
   );
