@@ -34,6 +34,8 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
 
   const [currentProgress, setCurrentProgress] = useState<number[]>([]);
 
+  const [playbackRate, setPlaybackRate] = useState(1);
+
   const { toast } = useToast();
 
   useEffect(() => {
@@ -194,7 +196,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
       if (!isAutoPauseOn) {
         handleNextLine();
       }
-    }, lineDuration * 1000);
+    }, (lineDuration * 1000) / playbackRate);
   };
 
   const handleNextLine = () => {
@@ -375,6 +377,14 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     setIsAutoPauseOn((prev) => !prev);
   };
 
+  const changePlaybackSpeed = () => {
+    if (!audioRef.current) return;
+    setPlaybackRate((prev) =>
+      prev >= 2 ? 0.5 : Number((prev + 0.1).toFixed(1))
+    );
+    audioRef.current.playbackRate = playbackRate;
+  };
+
   return {
     audioSrc,
     audioRef,
@@ -399,5 +409,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     isAutoPauseOn,
     handleAutoPause,
     currentProgress,
+    playbackRate,
+    changePlaybackSpeed,
   };
 }

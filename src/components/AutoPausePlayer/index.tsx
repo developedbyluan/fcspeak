@@ -20,6 +20,8 @@ type AutoPausePlayerProps = {
   onHideAutoPausePlayer: () => void;
   isAutoPauseOn: boolean;
   handleAutoPause: () => void;
+  playbackRate: number;
+  changePlaybackSpeed: () => void;
 };
 
 export default function AutoPausePlayer({
@@ -37,6 +39,8 @@ export default function AutoPausePlayer({
   onHideAutoPausePlayer,
   isAutoPauseOn,
   handleAutoPause,
+  playbackRate,
+  changePlaybackSpeed,
 }: AutoPausePlayerProps) {
   return (
     <div>
@@ -59,6 +63,8 @@ export default function AutoPausePlayer({
         onHideAutoPausePlayer={onHideAutoPausePlayer}
         isAutoPauseOn={isAutoPauseOn}
         handleAutoPause={handleAutoPause}
+        playbackRate={playbackRate}
+        changePlaybackSpeed={changePlaybackSpeed}
       />
     </div>
   );

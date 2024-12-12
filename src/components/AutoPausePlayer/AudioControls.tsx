@@ -28,6 +28,8 @@ type AudioControlsProps = {
   onHideAutoPausePlayer: () => void;
   isAutoPauseOn: boolean;
   handleAutoPause: () => void;
+  playbackRate: number;
+  changePlaybackSpeed: () => void;
 };
 
 export default function AudioControls({
@@ -44,6 +46,8 @@ export default function AudioControls({
   onHideAutoPausePlayer,
   isAutoPauseOn,
   handleAutoPause,
+  playbackRate,
+  changePlaybackSpeed,
 }: AudioControlsProps) {
   const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
@@ -133,13 +137,22 @@ export default function AudioControls({
                   size={32}
                 />
               </button>
-              <button onClick={onNextLine} disabled={disabled}>
-                <LucideSkipForward
-                  stroke={isAutoPauseOn ? "red" : "white"}
-                  fill={isAutoPauseOn ? "red" : "white"}
-                  size={32}
-                />
-              </button>
+              {isAutoPauseOn ? (
+                <button onClick={onNextLine} disabled={disabled}>
+                  <LucideSkipForward
+                    stroke={isAutoPauseOn ? "red" : "white"}
+                    fill={isAutoPauseOn ? "red" : "white"}
+                    size={32}
+                  />
+                </button>
+              ) : (
+                <button
+                  onClick={changePlaybackSpeed}
+                  className="text-white text-xl font-bold"
+                >
+                  {playbackRate.toFixed(1)}x
+                </button>
+              )}
             </div>
           </motion.div>
         </>
