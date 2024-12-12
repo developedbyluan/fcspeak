@@ -80,10 +80,11 @@ export default function StatsPage() {
     const getContinueData = () => {
       try {
         const continueData = localStorage.getItem(
-          `continue-pronunciation-course-data`
+          `continue-training-history`
         );
         if (!continueData) return;
         const continueDataObject = JSON.parse(continueData);
+        console.log("continueDataObject", continueDataObject);
         setContinueMeta(continueDataObject[unitId].meta);
       } catch (error) {
         console.error("Error getting continue data", (error as Error).message);

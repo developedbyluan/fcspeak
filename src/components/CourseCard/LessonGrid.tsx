@@ -11,7 +11,7 @@ export default function LessonGrid({ lessons, isVertical }: LessonGridProps) {
   return (
     <ScrollArea
       className={`w-full rounded-md border ${
-        isVertical ? "h-[600px]" : "whitespace-nowrap"
+        isVertical ? "max-h-[600px]" : "whitespace-nowrap"
       }`}
     >
       <div

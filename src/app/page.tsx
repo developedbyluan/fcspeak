@@ -11,7 +11,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const continueData = localStorage.getItem(
-      `continue-pronunciation-course-data`
+      `continue-training-history`
     );
     if (!continueData) return;
     const continueDataObject = JSON.parse(continueData);
@@ -25,7 +25,9 @@ export default function HomePage() {
 
   return (
     <main className="w-full max-w-[768px] border border-neutral-400 mx-auto p-6">
-      <ContinueCard title="Continue Training" lessons={continueLessons} />
+      {continueLessons.length > 0 && (
+        <ContinueCard title="Continue Training" lessons={continueLessons} />
+      )}
       <CourseCard
         title={pronunciationCourse.title}
         lessons={pronunciationCourse.lessons}

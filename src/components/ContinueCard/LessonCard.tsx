@@ -19,9 +19,10 @@ export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
     router.push(`/pronunciation/unit${lesson.id}`);
   };
 
-  const handleStatsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    router.push(`/pronunciation/unit${lesson.id}/stats`);
+  const fromSecondsToMinutesAndSeconds = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -61,14 +62,16 @@ export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
               <p className="text-sm text-muted-foreground mb-1">
                 {lesson.vietnamese}
               </p>
-              <p className="text-sm text-muted-foreground">{lesson.duration}</p>
+              <p className="text-sm text-muted-foreground">
+                {fromSecondsToMinutesAndSeconds(Number(lesson.duration))}
+              </p>
             </div>
           </div>
         </CardContent>
       </Card>
       <Link
         className="absolute bottom-2 right-2"
-        href={`/pronunciation/unit${lesson.id}/stats`}
+        href={`/pronunciation/${lesson.id}/stats`}
         passHref
       >
         <Button variant="outline" size="sm" className="mt-2">
