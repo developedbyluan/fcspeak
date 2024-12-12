@@ -7,6 +7,7 @@ import {
   LucideSkipForward,
   MessageSquareQuote,
   Mic,
+  MonitorPause,
 } from "lucide-react";
 
 import { AnimatePresence, motion } from "framer-motion";
@@ -24,6 +25,8 @@ type AudioControlsProps = {
   showIPA: boolean;
   onGotoPreviousSessionLine: () => void;
   onHideAutoPausePlayer: () => void;
+  isAutoPauseOn: boolean;
+  handleAutoPause: () => void;
 };
 
 export default function AudioControls({
@@ -38,6 +41,8 @@ export default function AudioControls({
   showIPA,
   onGotoPreviousSessionLine,
   onHideAutoPausePlayer,
+  isAutoPauseOn,
+  handleAutoPause,
 }: AudioControlsProps) {
   const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
@@ -79,6 +84,16 @@ export default function AudioControls({
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="fixed top-3 right-1 flex items-center gap-7 px-4 py-3 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
           >
+            <button
+              onClick={handleAutoPause}
+              aria-label={isAutoPauseOn ? "Auto pause off" : "Auto pause on"}
+            >
+              <MonitorPause
+                stroke={isAutoPauseOn ? "red" : "white"}
+                strokeWidth={isAutoPauseOn ? 2 : 0.75}
+                size={32}
+              />
+            </button>
             <button onClick={onShowIPA} aria-label="Show translation">
               <MessageSquareQuote
                 stroke="white"
@@ -110,16 +125,29 @@ export default function AudioControls({
                 disabled={disabled}
                 aria-label={ariaLabel}
               >
-                <LucidePlay stroke="white" fill="white" size={32} />
+                <LucidePlay
+                  stroke={isAutoPauseOn ? "red" : "white"}
+                  fill={isAutoPauseOn ? "red" : "white"}
+                  size={32}
+                />
               </button>
               <button onClick={onNextLine} disabled={disabled}>
-                <LucideSkipForward stroke="white" fill="white" size={32} />
+                <LucideSkipForward
+                  stroke={isAutoPauseOn ? "red" : "white"}
+                  fill={isAutoPauseOn ? "red" : "white"}
+                  size={32}
+                />
               </button>
             </div>
           </motion.div>
         </>
       ) : (
-        <div className="fixed z-50 inset-0"></div>
+        <div
+          className="fixed z-50 inset-0 cursor-pointer"
+          role="button"
+          onClick={onTogglePlayPause}
+          aria-label={isPlaying ? "Click to pause" : ""}
+        ></div>
       )}
     </AnimatePresence>
   );
