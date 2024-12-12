@@ -40,6 +40,8 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
       currentLine: 1,
       totalLines: lyricsUnit.lyrics.length,
     });
+
+    addLessonMetaToContinueTrainingHistoryInLocalStorage(lyricsUnit.meta.slug);
   }, [lyricsUnit]);
 
   useEffect(() => {
@@ -235,6 +237,81 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
       pronunciationLogsObj[lyricsUnit.meta.slug].currentIndex;
     setCurrentLyricIndex(currentIndex);
     setIsLineFinished(false);
+  };
+
+  const addLessonMetaToContinueTrainingHistoryInLocalStorage = (
+    unitId: string
+  ) => {
+    // TODO: create a new continue training history for first time ever user
+    const continueTrainingHistory = localStorage.getItem(
+      "continue-training-history"
+    );
+    if (!lyricsUnit) return;
+    if (!continueTrainingHistory) {
+      createContinueTrainingHistoryForFirstTimeUser(lyricsUnit, unitId);
+    } else {
+      updateContinueTrainingHistoryForExistingUser(
+        continueTrainingHistory,
+        unitId,
+        lyricsUnit
+      );
+    }
+
+    function updateContinueTrainingHistoryForExistingUser(
+      continueTrainingHistory: string,
+      unitId: string,
+      lyricsUnit: LyricsUnit
+    ) {
+      const continueTrainingHistoryObj = JSON.parse(continueTrainingHistory);
+      if (continueTrainingHistoryObj[unitId]) {
+        continueTrainingHistoryObj[unitId].lastTrainingSession =
+          new Date().getTime();
+      } else {
+        continueTrainingHistoryObj[unitId] = {
+          meta: lyricsUnit.meta,
+          lastTrainingSession: new Date().getTime(),
+        };
+      }
+      localStorage.setItem(
+        "continue-training-history",
+        JSON.stringify(continueTrainingHistoryObj)
+      );
+    }
+
+    function createContinueTrainingHistoryForFirstTimeUser(
+      lyricsUnit: LyricsUnit,
+      unitId: string
+    ) {
+      const continueTrainingHistoryObj: {
+        [unitId: string]: {
+          meta: {
+            course: string;
+            title: string;
+            id: string;
+            vietnamese?: string;
+            duration?: number;
+            thumbnail?: string;
+          };
+          lastTrainingSession: number;
+        };
+      } = {
+        [unitId]: {
+          meta: {
+            course: lyricsUnit.meta.course,
+            title: lyricsUnit.meta.title,
+            id: lyricsUnit.meta.slug,
+            vietnamese: lyricsUnit.meta.vietnamese,
+            duration: lyricsUnit.meta.duration,
+            thumbnail: lyricsUnit.meta.thumbnail,
+          },
+          lastTrainingSession: new Date().getTime(),
+        },
+      };
+      localStorage.setItem(
+        "continue-training-history",
+        JSON.stringify(continueTrainingHistoryObj)
+      );
+    }
   };
 
   return {

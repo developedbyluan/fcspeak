@@ -36,7 +36,7 @@ export default function LessonComplete() {
           <CardTitle className="text-3xl font-bold text-green-600">Congratulations!</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-xl mb-4">You've completed the lesson!</p>
+          <p className="text-xl mb-4">You&apos;ve completed the lesson!</p>
           <div className="flex justify-center">
             <span className="text-5xl" role="img" aria-label="celebration emoji">
               🎉

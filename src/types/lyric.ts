@@ -16,6 +16,9 @@ type LyricsUnitMeta = {
   fileName: string;
   course: string;
   slug: string;
+  vietnamese?: string;
+  duration?: number;
+  thumbnail?: string;
 };
 
 type LyricsUnit = {
