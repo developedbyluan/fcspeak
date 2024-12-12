@@ -16,7 +16,7 @@ export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
   const router = useRouter();
 
   const handleLessonCardClick = () => {
-    router.push(`/pronunciation/unit${lesson.id}`);
+    router.push(`/pronunciation/${lesson.id}`);
   };
 
   const fromSecondsToMinutesAndSeconds = (seconds: number) => {
