@@ -11,6 +11,8 @@ import LessonComplete from "./LessonComplete";
 import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
 
+import LyricsDisplay from "../LyricsDisplay";
+
 export default function PronunciationCourseUnit() {
   const [lyricsUnit, setLyricsUnit] = useState<LyricsUnit | null>(null);
   const [showTranslation, setShowTranslation] = useState<boolean>(false);
@@ -44,6 +46,10 @@ export default function PronunciationCourseUnit() {
     isCurrentProgressFull,
     setIsLessonFinished,
     isLessonFinished,
+    lyricRefs,
+    showAutoPausePlayer,
+    setShowAutoPausePlayer,
+    setCurrentLyricIndex,
   } = useAudioPlayer(lyricsUnit);
 
   const currentLyric = lyricsUnit?.lyrics[currentLyricIndex];
@@ -55,6 +61,14 @@ export default function PronunciationCourseUnit() {
   const handleShowIPA = () => {
     setShowIPA((prev) => !prev);
   };
+  const handleHideAutoPausePlayer = () => {
+    setShowAutoPausePlayer(false);
+  };
+
+  const handleShowAutoPausePlayer = (index: number) => {
+    setShowAutoPausePlayer(true);
+    setCurrentLyricIndex(index);
+  };
 
   return (
     <>
@@ -64,19 +78,29 @@ export default function PronunciationCourseUnit() {
             <>
               <audio ref={audioRef} src={audioSrc} />
               <ProgressBar audioProgress={audioProgress} />
-              <AutoPausePlayer
-                currentLyric={currentLyric}
-                isPlaying={isPlaying}
-                isLineFinished={isLineFinished}
-                onTogglePlayPause={handleAudioTogglePlayPause}
-                onNextLine={handleNextLine}
-                onShowTranslation={handleShowTranslation}
-                showTranslation={showTranslation}
-                onShowIPA={handleShowIPA}
-                showIPA={showIPA}
-                onGotoPreviousSessionLine={gotoPreviousSessionLine}
-                lyricProgress={lyricProgress}
-              />
+              {showAutoPausePlayer ? (
+                <AutoPausePlayer
+                  currentLyric={currentLyric}
+                  isPlaying={isPlaying}
+                  isLineFinished={isLineFinished}
+                  onTogglePlayPause={handleAudioTogglePlayPause}
+                  onNextLine={handleNextLine}
+                  onShowTranslation={handleShowTranslation}
+                  showTranslation={showTranslation}
+                  onShowIPA={handleShowIPA}
+                  showIPA={showIPA}
+                  onGotoPreviousSessionLine={gotoPreviousSessionLine}
+                  lyricProgress={lyricProgress}
+                  onHideAutoPausePlayer={handleHideAutoPausePlayer}
+                />
+              ) : (
+                <LyricsDisplay
+                  lyricsData={lyricsUnit?.lyrics}
+                  currentLyricIndex={currentLyricIndex}
+                  lyricRefs={lyricRefs}
+                  onShowAutoPausePlayer={handleShowAutoPausePlayer}
+                />
+              )}
               {isCurrentProgressFull && !isPlaying && (
                 <Button
                   onClick={() => setIsLessonFinished(true)}

@@ -17,6 +17,7 @@ type AutoPausePlayerProps = {
     currentLine: number;
     totalLines: number;
   };
+  onHideAutoPausePlayer: () => void;
 };
 
 export default function AutoPausePlayer({
@@ -31,6 +32,7 @@ export default function AutoPausePlayer({
   showIPA,
   onGotoPreviousSessionLine,
   lyricProgress,
+  onHideAutoPausePlayer,
 }: AutoPausePlayerProps) {
   return (
     <div>
@@ -50,6 +52,7 @@ export default function AutoPausePlayer({
         onShowIPA={onShowIPA}
         showIPA={showIPA}
         onGotoPreviousSessionLine={onGotoPreviousSessionLine}
+        onHideAutoPausePlayer={onHideAutoPausePlayer}
       />
     </div>
   );

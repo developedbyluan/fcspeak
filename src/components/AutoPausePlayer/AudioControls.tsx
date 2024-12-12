@@ -23,6 +23,7 @@ type AudioControlsProps = {
   onShowIPA: () => void;
   showIPA: boolean;
   onGotoPreviousSessionLine: () => void;
+  onHideAutoPausePlayer: () => void;
 };
 
 export default function AudioControls({
@@ -36,6 +37,7 @@ export default function AudioControls({
   onShowIPA,
   showIPA,
   onGotoPreviousSessionLine,
+  onHideAutoPausePlayer,
 }: AudioControlsProps) {
   const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
@@ -53,7 +55,7 @@ export default function AudioControls({
             <button
               className="pl-4 pr-4 py-3"
               aria-label="Hide the AutoPause player"
-              onClick={() => {}}
+              onClick={onHideAutoPausePlayer}
             >
               <ChevronDown stroke="white" size={32} />
             </button>
