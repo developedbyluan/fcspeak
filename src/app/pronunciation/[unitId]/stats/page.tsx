@@ -41,14 +41,10 @@ export default function StatsPage() {
       duration: number;
     }[]
   >([]);
-  const [continueData, setContinueData] = useState<{
-    [key: string]: {
-      [meta: string]: {
-        course: string;
-        title: string;
-      };
-    };
-  }>("");
+  const [continueMeta, setContinueMeta] = useState<{
+    course: string;
+    title: string;
+  }>({ course: "", title: "" });
 
   useEffect(() => {
     const logsName = `${unitId}-pronunciation-course-logs`;
@@ -58,7 +54,6 @@ export default function StatsPage() {
       );
       if (!pronunciationCourseUnitObject[unitId]) return;
       const logs = pronunciationCourseUnitObject[unitId].logs;
-      console.log(logs);
       const stats = logs.map(
         (
           log: {
@@ -79,36 +74,25 @@ export default function StatsPage() {
           };
         }
       );
-      // ❌console.log("stats v1", stats[0]["1"].reps);
-      // ✅console.log("stats v2", stats[0].reps);
       setChartData(stats);
     };
 
+    const getContinueData = () => {
+      try {
+        const continueData = localStorage.getItem(
+          `continue-pronunciation-course-data`
+        );
+        if (!continueData) return;
+        const continueDataObject = JSON.parse(continueData);
+        setContinueMeta(continueDataObject[unitId].meta);
+      } catch (error) {
+        console.error("Error getting continue data", (error as Error).message);
+      }
+    };
+
+    getContinueData();
     getLocalStorage();
   }, [unitId]);
-
-  useEffect(() => {
-    const getContinueData = () => {
-      const continueData = localStorage.getItem(
-        `continue-pronunciation-course-data`
-      );
-      if (!continueData) return;
-      const continueDataObject = JSON.parse(continueData);
-      console.log("continueDataObject", continueDataObject);
-      console.log("continueData", continueDataObject[unitId].meta.title);
-      setContinueData(continueDataObject[unitId].meta.title);
-    };
-    getContinueData();
-  }, [unitId]);
-
-  // const chartData = [
-  //   { date: "2024-12-01", id: 1, reps: 186, duration: 80 },
-  //   { date: "2024-12-02", id: 2, reps: 305, duration: 200 },
-  //   { date: "2024-12-03", id: 3, reps: 237, duration: 120 },
-  //   { date: "2024-12-04", id: 4, reps: 73, duration: 190 },
-  //   { date: "2024-12-05", id: 5, reps: 209, duration: 130 },
-  //   { date: "2024-12-06", id: 6, reps: 214, duration: 140 },
-  // ];
 
   const chartConfig = {
     reps: {
@@ -127,16 +111,22 @@ export default function StatsPage() {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-bold">{continueData} Stats</h1>
+        <h1 className="text-xl font-bold">
+        Pronunciation Course
+        </h1>
         <Link href="/" passHref>
-          <Button variant="outline">Back to Lessons</Button>
+          <Button variant="outline">Back to All Lessons</Button>
         </Link>
       </div>
       {chartData.length > 0 ? (
         <Card>
           <CardHeader>
-            <CardTitle>Your daily achievements</CardTitle>
-            <CardDescription>5-day training method</CardDescription>
+            <CardTitle>
+              {continueMeta.title}
+            </CardTitle>
+            <CardDescription>
+              Keep track of your efforts
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer config={chartConfig}>
