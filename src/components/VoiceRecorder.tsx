@@ -1,5 +1,6 @@
-import { Square, Ear } from "lucide-react";
+import { Square } from "lucide-react";
 import type { Lyric } from "@/types/lyric";
+import { useEffect, useState } from "react";
 
 type VoiceRecorderProps = {
   isRecording: boolean;
@@ -16,6 +17,14 @@ export default function VoiceRecorder({
   text,
   currentLyric,
 }: VoiceRecorderProps) {
+  const [isMicReady, setIsMicReady] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsMicReady(true);
+    }, 2000);
+  }, []);
+
   const stopRecordingAndTranscribing = () => {
     stopRecording();
     stopTranscribing();
@@ -29,7 +38,7 @@ export default function VoiceRecorder({
         onClick={stopRecordingAndTranscribing}
         className={`
           relative w-20 h-20 rounded-full 
-          bg-red-500 animate-pulse
+          ${isMicReady ? "bg-red-500 animate-pulse" : "bg-zinc-500"}
           transition-colors duration-1000 ease-in-out
           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
         `}
