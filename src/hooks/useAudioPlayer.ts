@@ -388,7 +388,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const changePlaybackSpeed = () => {
     if (!audioRef.current) return;
     const newPlaybackRate =
-      playbackRate >= 2 ? 0.5 : Number((playbackRate + 0.1).toFixed(1));
+      playbackRate < 0.5 ? 2 : Number((playbackRate - 0.1).toFixed(1));
     setPlaybackRate(newPlaybackRate);
     audioRef.current.playbackRate = newPlaybackRate;
   };
