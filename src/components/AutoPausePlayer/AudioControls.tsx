@@ -13,6 +13,7 @@ import {
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 
 type AudioControlsProps = {
   isPlaying: boolean;
@@ -133,27 +134,31 @@ export default function AudioControls({
             className="fixed w-full bottom-2 px-1"
           >
             <div className="mx-auto bg-gradient-to-r from-zinc-700 via-zinc-700 to-zinc-600 rounded-xl px-3 py-5 flex justify-between items-center">
-              {isRecording ? (
+              {isAutoPauseOn ? (
                 <button
                   onClick={() => {
-                    stopRecording();
-                    stopTranscribing();
+                    // startRecording();
+                    // startTranscribing();
+                    console.log("start recording");
                   }}
-                  aria-label="Stop recording"
+                  aria-label="Start recording"
                 >
-                  <MicOff stroke="white" size={32} />
+                  <Mic stroke="red" size={32} />
                 </button>
               ) : (
                 <button
                   onClick={() => {
-                    startRecording();
-                    startTranscribing();
+                    toast({
+                      title: "Recording only available in AutoPause mode",
+                      variant: "destructive",
+                    });
                   }}
-                  aria-label="Start recording"
+                  aria-label="Recording only available in AutoPause mode"
                 >
-                  <Mic stroke="white" size={32} />
+                  <MicOff stroke="white" size={32} />
                 </button>
               )}
+              {/*  */}
               <button
                 onClick={onTogglePlayPause}
                 disabled={disabled}
