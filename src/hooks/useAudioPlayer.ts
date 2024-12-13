@@ -33,7 +33,6 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const [isAutoPauseOn, setIsAutoPauseOn] = useState(false);
 
   const [currentProgress, setCurrentProgress] = useState<number[]>([]);
-
   const [playbackRate, setPlaybackRate] = useState(1);
 
   const { toast } = useToast();
@@ -388,10 +387,10 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
 
   const changePlaybackSpeed = () => {
     if (!audioRef.current) return;
-    setPlaybackRate((prev) =>
-      prev >= 2 ? 0.5 : Number((prev + 0.1).toFixed(1))
-    );
-    audioRef.current.playbackRate = playbackRate;
+    const newPlaybackRate =
+      playbackRate >= 2 ? 0.5 : Number((playbackRate + 0.1).toFixed(1));
+    setPlaybackRate(newPlaybackRate);
+    audioRef.current.playbackRate = newPlaybackRate;
   };
 
   return {
