@@ -33,6 +33,8 @@ type AudioControlsProps = {
   startRecording: () => void;
   stopRecording: () => void;
   isRecording: boolean;
+  startTranscribing: () => void;
+  stopTranscribing: () => void;
 };
 
 export default function AudioControls({
@@ -54,6 +56,8 @@ export default function AudioControls({
   startRecording,
   stopRecording,
   isRecording,
+  startTranscribing,
+  stopTranscribing,
 }: AudioControlsProps) {
   const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
@@ -130,11 +134,23 @@ export default function AudioControls({
           >
             <div className="mx-auto bg-gradient-to-r from-zinc-700 via-zinc-700 to-zinc-600 rounded-xl px-3 py-5 flex justify-between items-center">
               {isRecording ? (
-                <button onClick={stopRecording} aria-label="Stop recording">
+                <button
+                  onClick={() => {
+                    stopRecording();
+                    stopTranscribing();
+                  }}
+                  aria-label="Stop recording"
+                >
                   <MicOff stroke="white" size={32} />
                 </button>
               ) : (
-                <button onClick={startRecording} aria-label="Start recording">
+                <button
+                  onClick={() => {
+                    startRecording();
+                    startTranscribing();
+                  }}
+                  aria-label="Start recording"
+                >
                   <Mic stroke="white" size={32} />
                 </button>
               )}

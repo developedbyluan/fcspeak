@@ -1,3 +1,18 @@
+declare global {
+  interface Window {
+    SpeechRecognition: new () => SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognition;
+  }
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: (event: any) => void;
+  start: () => void;
+  stop: () => void;
+}
+
 import { useState, useRef, useEffect } from "react";
 
 export function useVoiceRecorder() {
@@ -8,6 +23,9 @@ export function useVoiceRecorder() {
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   const audioChunks = useRef<Blob[]>([]);
 
+  const [text, setText] = useState("");
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
   useEffect(() => {
     return () => {
       if (audioURL) {
@@ -15,6 +33,26 @@ export function useVoiceRecorder() {
       }
     };
   }, [audioURL]);
+
+  useEffect(() => {
+    if (
+      (typeof window !== "undefined" && "SpeechRecognition" in window) ||
+      "webkitSpeechRecognition" in window
+    ) {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
+
+      recognitionRef.current.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map((result: any) => result[0].transcript)
+          .join("");
+        setText(transcript);
+      };
+    }
+  }, []);
 
   const startRecording = async () => {
     try {
@@ -52,11 +90,30 @@ export function useVoiceRecorder() {
     }
   };
 
+  const startTranscribing = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.start();
+      setIsRecording(true);
+    } else {
+      alert("Speech recognition is not supported in your browser.");
+    }
+  };
+
+  const stopTranscribing = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
   return {
     isRecording,
     audioURL,
     error,
     startRecording,
     stopRecording,
+    startTranscribing,
+    stopTranscribing,
+    text,
   };
 }

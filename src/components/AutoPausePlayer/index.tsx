@@ -43,7 +43,7 @@ export default function AutoPausePlayer({
   playbackRate,
   changePlaybackSpeed,
 }: AutoPausePlayerProps) {
-  const { startRecording, stopRecording, isRecording, audioURL } = useVoiceRecorder();
+  const { startRecording, stopRecording, isRecording, audioURL, startTranscribing, stopTranscribing, text } = useVoiceRecorder();
   return (
     <div>
       <SingleLyricDisplay
@@ -53,6 +53,7 @@ export default function AutoPausePlayer({
         lyricProgress={lyricProgress}
       />
       {audioURL && <audio src={audioURL} controls />}
+      {text && <p>{text}</p>}
       <AudioControls
         isPlaying={isPlaying}
         isLineFinished={isLineFinished}
@@ -71,6 +72,8 @@ export default function AutoPausePlayer({
         startRecording={startRecording}
         stopRecording={stopRecording}
         isRecording={isRecording}
+        startTranscribing={startTranscribing}
+        stopTranscribing={stopTranscribing}
       />
     </div>
   );
