@@ -135,6 +135,7 @@ export default function PronunciationCourseUnit({ unitId }: PronunciationCourseU
                   onShowAutoPausePlayer={handleShowAutoPausePlayer}
                   currentProgress={currentProgress}
                   handleSync={handleSync}
+                  lyricsUnitMeta={lyricsUnitMeta}
                 />
               )}
             </>
