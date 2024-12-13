@@ -114,6 +114,7 @@ export default function AutoPausePlayer({
         stopTranscribing={stopTranscribing}
         revokeRecordedAudioURL={revokeRecordedAudioURL}
         isRecordedAudioPlaying={isRecordedAudioPlaying}
+        toggleRecordedAudioPlaying={toggleRecordedAudioPlaying}
       />
     </div>
   );

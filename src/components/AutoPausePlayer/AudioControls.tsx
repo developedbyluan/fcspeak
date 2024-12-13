@@ -38,6 +38,7 @@ type AudioControlsProps = {
   stopTranscribing: () => void;
   revokeRecordedAudioURL: () => void;
   isRecordedAudioPlaying: boolean;
+  toggleRecordedAudioPlaying: () => void;
 };
 
 export default function AudioControls({
@@ -61,6 +62,7 @@ export default function AudioControls({
   startTranscribing,
   revokeRecordedAudioURL,
   isRecordedAudioPlaying,
+  toggleRecordedAudioPlaying,
 }: AudioControlsProps) {
   const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
@@ -211,7 +213,10 @@ export default function AudioControls({
           className="fixed z-50 inset-0 cursor-pointer"
           role="button"
           onClick={() => {
-            if (isRecordedAudioPlaying) return;
+            if (isRecordedAudioPlaying) {
+              toggleRecordedAudioPlaying();
+              return;
+            }
             onTogglePlayPause();
           }}
           aria-label={isPlaying ? "Click to pause" : ""}
