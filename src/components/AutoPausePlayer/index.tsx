@@ -2,6 +2,8 @@ import SingleLyricDisplay from "./SingleLyricDisplay";
 import AudioControls from "./AudioControls";
 import { Lyric } from "@/types/lyric";
 import { useVoiceRecorder } from "@/hooks/use-voice-recorder";
+import VoiceRecording from "../VoiceRecorder";
+import VoiceRecorder from "../VoiceRecorder";
 
 type AutoPausePlayerProps = {
   currentLyric: Lyric;
@@ -43,7 +45,15 @@ export default function AutoPausePlayer({
   playbackRate,
   changePlaybackSpeed,
 }: AutoPausePlayerProps) {
-  const { startRecording, stopRecording, isRecording, audioURL, startTranscribing, stopTranscribing, text } = useVoiceRecorder();
+  const {
+    startRecording,
+    stopRecording,
+    isRecording,
+    audioURL,
+    startTranscribing,
+    stopTranscribing,
+    text,
+  } = useVoiceRecorder();
   return (
     <div>
       <SingleLyricDisplay
@@ -53,7 +63,14 @@ export default function AutoPausePlayer({
         lyricProgress={lyricProgress}
       />
       {audioURL && <audio src={audioURL} controls />}
-      {text && <p>{text}</p>}
+      {isRecording && (
+        <VoiceRecorder
+          isRecording={isRecording}
+          stopRecording={stopRecording}
+          stopTranscribing={stopTranscribing}
+          text={text}
+        />
+      )}
       <AudioControls
         isPlaying={isPlaying}
         isLineFinished={isLineFinished}

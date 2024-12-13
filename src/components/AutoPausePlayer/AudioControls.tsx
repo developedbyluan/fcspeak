@@ -137,9 +137,8 @@ export default function AudioControls({
               {isAutoPauseOn ? (
                 <button
                   onClick={() => {
-                    // startRecording();
-                    // startTranscribing();
-                    console.log("start recording");
+                    startRecording();
+                    startTranscribing();
                   }}
                   aria-label="Start recording"
                 >
