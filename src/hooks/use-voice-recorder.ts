@@ -129,7 +129,12 @@ export function useVoiceRecorder() {
     }
   };
   const toggleRecordedAudioPlaying = () => {
-    if (recordedAudioRef.current) {
+    if (!recordedAudioRef.current) return;
+    if (isRecordedAudioPlaying) {
+      recordedAudioRef.current.pause();
+      recordedAudioRef.current.currentTime = 0;
+      setIsRecordedAudioPlaying(false);
+    } else {
       recordedAudioRef.current.play();
       setIsRecordedAudioPlaying(true);
     }

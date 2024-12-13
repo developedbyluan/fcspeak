@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
-import { unit1 } from "@/data/pronunciation/unit1-lyrics-data";
 import AudioFileInput from "@/components/AudioPlayer/AudioFileInput";
 import { AudioFileInputSkeleton } from "@/components/AudioPlayer/AudioFileInputSkeleton";
 import AutoPausePlayer from "../AutoPausePlayer";
@@ -8,8 +7,6 @@ import { LyricsUnit } from "@/types/lyric";
 
 import ProgressBar from "../AudioPlayer/ProgressBar";
 import LessonComplete from "./LessonComplete";
-import { Button } from "@/components/ui/button";
-import { CheckIcon } from "lucide-react";
 
 import LyricsDisplay from "../LyricsDisplay";
 import { toast } from "@/hooks/use-toast";
@@ -120,6 +117,8 @@ export default function PronunciationCourseUnit({ unitId }: PronunciationCourseU
                   handleAutoPause={handleAutoPause}
                   playbackRate={playbackRate}
                   changePlaybackSpeed={changePlaybackSpeed}
+                  isCurrentProgressFull={isCurrentProgressFull}
+                  setIsLessonFinished={setIsLessonFinished}
                 />
               ) : (
                 <LyricsDisplay
@@ -129,15 +128,6 @@ export default function PronunciationCourseUnit({ unitId }: PronunciationCourseU
                   onShowAutoPausePlayer={handleShowAutoPausePlayer}
                   currentProgress={currentProgress}
                 />
-              )}
-              {isCurrentProgressFull && !isPlaying && (
-                <Button
-                  onClick={() => setIsLessonFinished(true)}
-                  className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-                >
-                  <CheckIcon className="w-4 h-4" />
-                  Finish Lesson
-                </Button>
               )}
             </>
           ) : (

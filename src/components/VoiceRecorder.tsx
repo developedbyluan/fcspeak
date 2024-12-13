@@ -1,5 +1,6 @@
-import { Square, Ear } from "lucide-react";
+import { Square } from "lucide-react";
 import type { Lyric } from "@/types/lyric";
+import { useEffect, useState, useRef } from "react";
 
 type VoiceRecorderProps = {
   isRecording: boolean;
@@ -16,9 +17,37 @@ export default function VoiceRecorder({
   text,
   currentLyric,
 }: VoiceRecorderProps) {
+  const [isMicReady, setIsMicReady] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsMicReady(true);
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    if (!isRecording) return;
+
+    timeoutRef.current = setTimeout(() => {
+      stopRecordingAndTranscribing();
+    }, 2000 + (currentLyric.endTime - currentLyric.startTime) * 2 * 1000);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, [isRecording]);
+
   const stopRecordingAndTranscribing = () => {
     stopRecording();
     stopTranscribing();
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
   };
   return (
     <div className="absolute z-50 inset-0 bg-slate-900 flex flex-col justify-evenly items-center p-7">
@@ -29,7 +58,7 @@ export default function VoiceRecorder({
         onClick={stopRecordingAndTranscribing}
         className={`
           relative w-20 h-20 rounded-full 
-          bg-red-500 animate-pulse
+          ${isMicReady ? "bg-red-500 animate-pulse" : "bg-zinc-500"}
           transition-colors duration-1000 ease-in-out
           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
         `}

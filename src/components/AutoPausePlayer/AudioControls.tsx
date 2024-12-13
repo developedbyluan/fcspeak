@@ -9,11 +9,12 @@ import {
   Mic,
   MicOff,
   MonitorPause,
+  CheckIcon,
 } from "lucide-react";
-
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 type AudioControlsProps = {
   isPlaying: boolean;
@@ -38,6 +39,9 @@ type AudioControlsProps = {
   stopTranscribing: () => void;
   revokeRecordedAudioURL: () => void;
   isRecordedAudioPlaying: boolean;
+  toggleRecordedAudioPlaying: () => void;
+  isCurrentProgressFull: boolean;
+  setIsLessonFinished: (value: boolean) => void;
 };
 
 export default function AudioControls({
@@ -61,6 +65,9 @@ export default function AudioControls({
   startTranscribing,
   revokeRecordedAudioURL,
   isRecordedAudioPlaying,
+  toggleRecordedAudioPlaying,
+  isCurrentProgressFull,
+  setIsLessonFinished,
 }: AudioControlsProps) {
   const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
@@ -71,7 +78,7 @@ export default function AudioControls({
         <>
           <motion.div
             initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 0.5 }}
+            animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="fixed top-3 left-1 flex items-center gap-2 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
@@ -99,10 +106,19 @@ export default function AudioControls({
                 <CalendarSync stroke="white" strokeWidth={0.75} size={32} />
               </button>
             )}
+            {isCurrentProgressFull && !isPlaying && (
+              <button
+                onClick={() => setIsLessonFinished(true)}
+                aria-label="Finish lesson"
+                className="pl-4 pr-4 py-3 bg-green-700 rounded-tr-xl rounded-br-xl"
+              >
+                <CheckIcon stroke="white" strokeWidth={4} size={32} />
+              </button>
+            )}
           </motion.div>
           <motion.div
             initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 0.5 }}
+            animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="fixed top-3 right-1 flex items-center gap-7 px-4 py-3 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
@@ -211,7 +227,10 @@ export default function AudioControls({
           className="fixed z-50 inset-0 cursor-pointer"
           role="button"
           onClick={() => {
-            if (isRecordedAudioPlaying) return;
+            if (isRecordedAudioPlaying) {
+              toggleRecordedAudioPlaying();
+              return;
+            }
             onTogglePlayPause();
           }}
           aria-label={isPlaying ? "Click to pause" : ""}

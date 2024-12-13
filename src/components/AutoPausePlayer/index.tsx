@@ -26,6 +26,8 @@ type AutoPausePlayerProps = {
   handleAutoPause: () => void;
   playbackRate: number;
   changePlaybackSpeed: () => void;
+  isCurrentProgressFull: boolean;
+  setIsLessonFinished: (value: boolean) => void;
 };
 
 export default function AutoPausePlayer({
@@ -45,6 +47,8 @@ export default function AutoPausePlayer({
   handleAutoPause,
   playbackRate,
   changePlaybackSpeed,
+  isCurrentProgressFull,
+  setIsLessonFinished,
 }: AutoPausePlayerProps) {
   const {
     startRecording,
@@ -59,10 +63,6 @@ export default function AutoPausePlayer({
     toggleRecordedAudioPlaying,
     isRecordedAudioPlaying,
   } = useVoiceRecorder();
-
-  useEffect(() => {
-    console.log(isPlaying, isRecordedAudioPlaying);
-  }, [isPlaying, isRecordedAudioPlaying]);
 
   return (
     <div>
@@ -114,6 +114,9 @@ export default function AutoPausePlayer({
         stopTranscribing={stopTranscribing}
         revokeRecordedAudioURL={revokeRecordedAudioURL}
         isRecordedAudioPlaying={isRecordedAudioPlaying}
+        toggleRecordedAudioPlaying={toggleRecordedAudioPlaying}
+        isCurrentProgressFull={isCurrentProgressFull}
+        setIsLessonFinished={setIsLessonFinished}
       />
     </div>
   );
