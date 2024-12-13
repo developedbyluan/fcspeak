@@ -17,7 +17,7 @@ import { useState, useRef, useEffect } from "react";
 
 export function useVoiceRecorder() {
   const [isRecording, setIsRecording] = useState(false);
-  const [audioURL, setAudioURL] = useState<string | null>(null);
+  const [recordedAudioURL, setRecordedAudioURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const mediaRecorder = useRef<MediaRecorder | null>(null);
@@ -26,13 +26,16 @@ export function useVoiceRecorder() {
   const [text, setText] = useState("");
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
+  const recordedAudioRef = useRef<HTMLAudioElement | null>(null);
+  const [isRecordedAudioPlaying, setIsRecordedAudioPlaying] = useState(false);
+
   useEffect(() => {
     return () => {
-      if (audioURL) {
-        URL.revokeObjectURL(audioURL);
+      if (recordedAudioURL) {
+        URL.revokeObjectURL(recordedAudioURL);
       }
     };
-  }, [audioURL]);
+  }, [recordedAudioURL]);
 
   useEffect(() => {
     if (
@@ -54,6 +57,18 @@ export function useVoiceRecorder() {
     }
   }, []);
 
+  useEffect(() => {
+    const recordedAudio = recordedAudioRef.current;
+    if (!recordedAudio) return;
+    const stopPlaying = () => {
+      setIsRecordedAudioPlaying(false);
+    };
+    recordedAudio.addEventListener("ended", stopPlaying);
+    return () => {
+      recordedAudio.removeEventListener("ended", stopPlaying);
+    };
+  }, [recordedAudioRef, isRecordedAudioPlaying]);
+
   const startRecording = async () => {
     try {
       setError(null);
@@ -69,7 +84,7 @@ export function useVoiceRecorder() {
       mediaRecorder.current.onstop = () => {
         const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
         const url = URL.createObjectURL(audioBlob);
-        setAudioURL(url);
+        setRecordedAudioURL(url);
         audioChunks.current = [];
 
         stream.getTracks().forEach((track) => track.stop());
@@ -106,14 +121,31 @@ export function useVoiceRecorder() {
     }
   };
 
+  const revokeRecordedAudioURL = () => {
+    if (recordedAudioURL) {
+      URL.revokeObjectURL(recordedAudioURL);
+      setRecordedAudioURL(null);
+      setText("");
+    }
+  };
+  const toggleRecordedAudioPlaying = () => {
+    if (recordedAudioRef.current) {
+      recordedAudioRef.current.play();
+      setIsRecordedAudioPlaying(true);
+    }
+  };
   return {
     isRecording,
-    audioURL,
+    recordedAudioURL,
     error,
     startRecording,
     stopRecording,
     startTranscribing,
     stopTranscribing,
     text,
+    recordedAudioRef,
+    revokeRecordedAudioURL,
+    toggleRecordedAudioPlaying,
+    isRecordedAudioPlaying,
   };
 }

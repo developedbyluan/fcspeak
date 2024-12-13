@@ -36,6 +36,8 @@ type AudioControlsProps = {
   isRecording: boolean;
   startTranscribing: () => void;
   stopTranscribing: () => void;
+  revokeRecordedAudioURL: () => void;
+  isRecordedAudioPlaying: boolean;
 };
 
 export default function AudioControls({
@@ -55,17 +57,17 @@ export default function AudioControls({
   playbackRate,
   changePlaybackSpeed,
   startRecording,
-  stopRecording,
   isRecording,
   startTranscribing,
-  stopTranscribing,
+  revokeRecordedAudioURL,
+  isRecordedAudioPlaying,
 }: AudioControlsProps) {
   const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
 
   return (
     <AnimatePresence>
-      {!isPlaying ? (
+      {!isPlaying && !isRecordedAudioPlaying ? (
         <>
           <motion.div
             initial={{ y: -100, opacity: 0 }}
@@ -77,7 +79,10 @@ export default function AudioControls({
             <button
               className="pl-4 pr-4 py-3"
               aria-label="Hide the AutoPause player"
-              onClick={onHideAutoPausePlayer}
+              onClick={() => {
+                revokeRecordedAudioURL();
+                onHideAutoPausePlayer();
+              }}
             >
               <ChevronDown stroke="white" size={32} />
             </button>
@@ -85,6 +90,7 @@ export default function AudioControls({
               <button
                 className="pl-4 pr-4 py-3 bg-zinc-700 rounded-tr-xl rounded-br-xl"
                 onClick={() => {
+                  revokeRecordedAudioURL();
                   onGotoPreviousSessionLine();
                   setIsSynced(true);
                 }}
@@ -102,7 +108,10 @@ export default function AudioControls({
             className="fixed top-3 right-1 flex items-center gap-7 px-4 py-3 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
           >
             <button
-              onClick={handleAutoPause}
+              onClick={() => {
+                revokeRecordedAudioURL();
+                handleAutoPause();
+              }}
               aria-label={isAutoPauseOn ? "Auto pause off" : "Auto pause on"}
             >
               <MonitorPause
@@ -137,6 +146,7 @@ export default function AudioControls({
               {isAutoPauseOn ? (
                 <button
                   onClick={() => {
+                    revokeRecordedAudioURL();
                     startRecording();
                     startTranscribing();
                   }}
@@ -159,7 +169,9 @@ export default function AudioControls({
               )}
               {/*  */}
               <button
-                onClick={onTogglePlayPause}
+                onClick={() => {
+                  onTogglePlayPause();
+                }}
                 disabled={disabled}
                 aria-label={ariaLabel}
               >
@@ -170,7 +182,13 @@ export default function AudioControls({
                 />
               </button>
               {isAutoPauseOn ? (
-                <button onClick={onNextLine} disabled={disabled}>
+                <button
+                  onClick={() => {
+                    revokeRecordedAudioURL();
+                    onNextLine();
+                  }}
+                  disabled={disabled}
+                >
                   <LucideSkipForward
                     stroke={isAutoPauseOn ? "red" : "white"}
                     fill={isAutoPauseOn ? "red" : "white"}
@@ -192,7 +210,10 @@ export default function AudioControls({
         <div
           className="fixed z-50 inset-0 cursor-pointer"
           role="button"
-          onClick={onTogglePlayPause}
+          onClick={() => {
+            if (isRecordedAudioPlaying) return;
+            onTogglePlayPause();
+          }}
           aria-label={isPlaying ? "Click to pause" : ""}
         ></div>
       )}

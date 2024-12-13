@@ -2,8 +2,9 @@ import SingleLyricDisplay from "./SingleLyricDisplay";
 import AudioControls from "./AudioControls";
 import { Lyric } from "@/types/lyric";
 import { useVoiceRecorder } from "@/hooks/use-voice-recorder";
-import VoiceRecording from "../VoiceRecorder";
 import VoiceRecorder from "../VoiceRecorder";
+import PlayVoiceRecording from "../PlayVoiceRecording";
+import { useEffect } from "react";
 
 type AutoPausePlayerProps = {
   currentLyric: Lyric;
@@ -49,11 +50,20 @@ export default function AutoPausePlayer({
     startRecording,
     stopRecording,
     isRecording,
-    audioURL,
+    recordedAudioURL,
     startTranscribing,
     stopTranscribing,
     text,
+    recordedAudioRef,
+    revokeRecordedAudioURL,
+    toggleRecordedAudioPlaying,
+    isRecordedAudioPlaying,
   } = useVoiceRecorder();
+
+  useEffect(() => {
+    console.log(isPlaying, isRecordedAudioPlaying);
+  }, [isPlaying, isRecordedAudioPlaying]);
+
   return (
     <div>
       <SingleLyricDisplay
@@ -62,14 +72,25 @@ export default function AutoPausePlayer({
         showIPA={showIPA}
         lyricProgress={lyricProgress}
       />
-      {audioURL && <audio src={audioURL} controls />}
-      {isRecording && (
+      {isRecording ? (
         <VoiceRecorder
+          currentLyric={currentLyric}
           isRecording={isRecording}
           stopRecording={stopRecording}
           stopTranscribing={stopTranscribing}
           text={text}
         />
+      ) : (
+        <div className="absolute inset-0 left-1/2 top-3/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center">
+          {recordedAudioURL && (
+            <PlayVoiceRecording
+              recordedAudioURL={recordedAudioURL}
+              recordedAudioRef={recordedAudioRef}
+              toggleRecordedAudioPlaying={toggleRecordedAudioPlaying}
+              isRecordedAudioPlaying={isRecordedAudioPlaying}
+            />
+          )}
+        </div>
       )}
       <AudioControls
         isPlaying={isPlaying}
@@ -91,6 +112,8 @@ export default function AutoPausePlayer({
         isRecording={isRecording}
         startTranscribing={startTranscribing}
         stopTranscribing={stopTranscribing}
+        revokeRecordedAudioURL={revokeRecordedAudioURL}
+        isRecordedAudioPlaying={isRecordedAudioPlaying}
       />
     </div>
   );
