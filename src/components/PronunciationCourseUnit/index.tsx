@@ -14,7 +14,13 @@ import { CheckIcon } from "lucide-react";
 import LyricsDisplay from "../LyricsDisplay";
 import { toast } from "@/hooks/use-toast";
 
-export default function PronunciationCourseUnit() {
+import { fakeSupabaseData } from "@/data/fake-supabase";
+
+type PronunciationCourseUnitProps = {
+  unitId: string;
+};
+
+export default function PronunciationCourseUnit({ unitId }: PronunciationCourseUnitProps) {
   const [lyricsUnit, setLyricsUnit] = useState<LyricsUnit | null>(null);
   const [showTranslation, setShowTranslation] = useState<boolean>(false);
   const [showIPA, setShowIPA] = useState<boolean>(false);
@@ -24,7 +30,7 @@ export default function PronunciationCourseUnit() {
     const fetchData = async () => {
       try {
         await new Promise((resolve) => setTimeout(resolve, 3000));
-        setLyricsUnit(unit1);
+        setLyricsUnit(fakeSupabaseData.pronunciation[unitId]);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
