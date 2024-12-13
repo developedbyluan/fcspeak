@@ -21,6 +21,7 @@ export default function PronunciationCourseUnit({ unitId }: PronunciationCourseU
   const [lyricsUnit, setLyricsUnit] = useState<LyricsUnit | null>(null);
   const [showTranslation, setShowTranslation] = useState<boolean>(false);
   const [showIPA, setShowIPA] = useState<boolean>(false);
+  const [isSynced, setIsSynced] = useState(false);
 
 
   useEffect(() => {
@@ -91,6 +92,10 @@ export default function PronunciationCourseUnit({ unitId }: PronunciationCourseU
     handleNextLine();
   };
 
+  const handleSync = () => {
+    setIsSynced(true);
+  };
+
   return (
     <>
       {!isLessonFinished ? (
@@ -119,6 +124,8 @@ export default function PronunciationCourseUnit({ unitId }: PronunciationCourseU
                   changePlaybackSpeed={changePlaybackSpeed}
                   isCurrentProgressFull={isCurrentProgressFull}
                   setIsLessonFinished={setIsLessonFinished}
+                  isSynced={isSynced}
+                  handleSync={handleSync}
                 />
               ) : (
                 <LyricsDisplay
@@ -127,6 +134,7 @@ export default function PronunciationCourseUnit({ unitId }: PronunciationCourseU
                   lyricRefs={lyricRefs}
                   onShowAutoPausePlayer={handleShowAutoPausePlayer}
                   currentProgress={currentProgress}
+                  handleSync={handleSync}
                 />
               )}
             </>

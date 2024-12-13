@@ -8,6 +8,7 @@ type LyricsDisplayProps = {
   lyricRefs: React.RefObject<HTMLDivElement[]>;
   onShowAutoPausePlayer: (index: number) => void;
   currentProgress: number[];
+  handleSync: () => void;
 };
 
 export default function LyricsDisplay({
@@ -16,6 +17,7 @@ export default function LyricsDisplay({
   lyricRefs,
   onShowAutoPausePlayer,
   currentProgress,
+  handleSync,
 }: LyricsDisplayProps) {
   return (
     <ScrollArea className="min-h-svh rounded-md border p-4">
@@ -32,7 +34,10 @@ export default function LyricsDisplay({
               ? "bg-yellow-100 p-2 rounded"
               : "hover:bg-gray-100 p-2 rounded"
           }`}
-          onClick={() => onShowAutoPausePlayer(index)}
+          onClick={() => {
+            onShowAutoPausePlayer(index);
+            handleSync();
+          }}
         >
           <div>
             <span className="text-xs text-gray-500 flex items-center gap-1">

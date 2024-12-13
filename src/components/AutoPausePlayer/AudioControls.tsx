@@ -42,6 +42,8 @@ type AudioControlsProps = {
   toggleRecordedAudioPlaying: () => void;
   isCurrentProgressFull: boolean;
   setIsLessonFinished: (value: boolean) => void;
+  isSynced: boolean;
+  handleSync: () => void;
 };
 
 export default function AudioControls({
@@ -68,8 +70,9 @@ export default function AudioControls({
   toggleRecordedAudioPlaying,
   isCurrentProgressFull,
   setIsLessonFinished,
+  isSynced,
+  handleSync,
 }: AudioControlsProps) {
-  const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
 
   return (
@@ -81,7 +84,7 @@ export default function AudioControls({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed top-3 left-1 flex items-center gap-2 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
+            className="fixed top-3 left-1 flex items-center gap-1 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-600"
           >
             <button
               className="pl-4 pr-4 py-3"
@@ -99,11 +102,11 @@ export default function AudioControls({
                 onClick={() => {
                   revokeRecordedAudioURL();
                   onGotoPreviousSessionLine();
-                  setIsSynced(true);
+                  handleSync();
                 }}
                 aria-label="Go to previous session line"
               >
-                <CalendarSync stroke="white" strokeWidth={0.75} size={32} />
+                <CalendarSync stroke="red" strokeWidth={0.75} size={32} />
               </button>
             )}
             {isCurrentProgressFull && !isPlaying && (
@@ -127,6 +130,7 @@ export default function AudioControls({
               onClick={() => {
                 revokeRecordedAudioURL();
                 handleAutoPause();
+                handleSync();
               }}
               aria-label={isAutoPauseOn ? "Auto pause off" : "Auto pause on"}
             >
@@ -136,14 +140,25 @@ export default function AudioControls({
                 size={32}
               />
             </button>
-            <button onClick={onShowIPA} aria-label="Show translation">
+            <button
+              onClick={() => {
+                onShowIPA();
+                handleSync();
+              }}
+              aria-label="Show translation"
+            >
               <MessageSquareQuote
                 stroke="white"
                 strokeWidth={showIPA ? 2 : 0.75}
                 size={32}
               />
             </button>
-            <button onClick={onShowTranslation} aria-label="Show translation">
+            <button
+              onClick={() => {
+                onShowTranslation();
+              }}
+              aria-label="Show translation"
+            >
               <Languages
                 stroke="white"
                 strokeWidth={showTranslation ? 2 : 0.75}
@@ -187,6 +202,7 @@ export default function AudioControls({
               <button
                 onClick={() => {
                   onTogglePlayPause();
+                  handleSync();
                 }}
                 disabled={disabled}
                 aria-label={ariaLabel}
@@ -213,7 +229,9 @@ export default function AudioControls({
                 </button>
               ) : (
                 <button
-                  onClick={changePlaybackSpeed}
+                  onClick={() => {
+                    changePlaybackSpeed();
+                  }}
                   className="text-white text-xl font-bold"
                 >
                   {playbackRate.toFixed(1)}x

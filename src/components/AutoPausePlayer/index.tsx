@@ -28,6 +28,8 @@ type AutoPausePlayerProps = {
   changePlaybackSpeed: () => void;
   isCurrentProgressFull: boolean;
   setIsLessonFinished: (value: boolean) => void;
+  isSynced: boolean;
+  handleSync: () => void;
 };
 
 export default function AutoPausePlayer({
@@ -49,6 +51,8 @@ export default function AutoPausePlayer({
   changePlaybackSpeed,
   isCurrentProgressFull,
   setIsLessonFinished,
+  isSynced,
+  handleSync,
 }: AutoPausePlayerProps) {
   const {
     startRecording,
@@ -117,6 +121,8 @@ export default function AutoPausePlayer({
         toggleRecordedAudioPlaying={toggleRecordedAudioPlaying}
         isCurrentProgressFull={isCurrentProgressFull}
         setIsLessonFinished={setIsLessonFinished}
+        isSynced={isSynced}
+        handleSync={handleSync}
       />
     </div>
   );
