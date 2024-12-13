@@ -120,6 +120,8 @@ export default function PronunciationCourseUnit({ unitId }: PronunciationCourseU
                   handleAutoPause={handleAutoPause}
                   playbackRate={playbackRate}
                   changePlaybackSpeed={changePlaybackSpeed}
+                  isCurrentProgressFull={isCurrentProgressFull}
+                  setIsLessonFinished={setIsLessonFinished}
                 />
               ) : (
                 <LyricsDisplay
@@ -129,15 +131,6 @@ export default function PronunciationCourseUnit({ unitId }: PronunciationCourseU
                   onShowAutoPausePlayer={handleShowAutoPausePlayer}
                   currentProgress={currentProgress}
                 />
-              )}
-              {isCurrentProgressFull && !isPlaying && (
-                <Button
-                  onClick={() => setIsLessonFinished(true)}
-                  className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-                >
-                  <CheckIcon className="w-4 h-4" />
-                  Finish Lesson
-                </Button>
               )}
             </>
           ) : (
