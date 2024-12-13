@@ -18,8 +18,6 @@ export default function HomePage() {
     const continueLessonsArray: Lesson[] = Object.values(continueDataObject).map(
       (lesson: any) => lesson.meta
     );
-    console.log("continueDataObject", Object.values(continueDataObject));
-    console.log("continueLessons", continueLessons);
     setContinueLessons(continueLessonsArray);
   }, []);
 

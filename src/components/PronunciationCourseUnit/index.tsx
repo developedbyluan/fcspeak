@@ -12,11 +12,13 @@ import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
 
 import LyricsDisplay from "../LyricsDisplay";
+import { toast } from "@/hooks/use-toast";
 
 export default function PronunciationCourseUnit() {
   const [lyricsUnit, setLyricsUnit] = useState<LyricsUnit | null>(null);
   const [showTranslation, setShowTranslation] = useState<boolean>(false);
   const [showIPA, setShowIPA] = useState<boolean>(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +54,9 @@ export default function PronunciationCourseUnit() {
     setCurrentLyricIndex,
     isAutoPauseOn,
     handleAutoPause,
+    currentProgress,
+    playbackRate,
+    changePlaybackSpeed,
   } = useAudioPlayer(lyricsUnit);
 
   const currentLyric = lyricsUnit?.lyrics[currentLyricIndex];
@@ -72,6 +77,17 @@ export default function PronunciationCourseUnit() {
     setCurrentLyricIndex(index);
   };
 
+  const handleNextLineWithToast = () => {
+    if (!lyricsUnit) return;
+    if (currentLyricIndex === lyricsUnit?.lyrics.length - 1) {
+      toast({
+        description: "This is the last line of the lesson!",
+        variant: "destructive",
+      });
+    }
+    handleNextLine();
+  };
+
   return (
     <>
       {!isLessonFinished ? (
@@ -86,7 +102,7 @@ export default function PronunciationCourseUnit() {
                   isPlaying={isPlaying}
                   isLineFinished={isLineFinished}
                   onTogglePlayPause={handleAudioTogglePlayPause}
-                  onNextLine={handleNextLine}
+                  onNextLine={handleNextLineWithToast}
                   onShowTranslation={handleShowTranslation}
                   showTranslation={showTranslation}
                   onShowIPA={handleShowIPA}
@@ -96,6 +112,8 @@ export default function PronunciationCourseUnit() {
                   onHideAutoPausePlayer={handleHideAutoPausePlayer}
                   isAutoPauseOn={isAutoPauseOn}
                   handleAutoPause={handleAutoPause}
+                  playbackRate={playbackRate}
+                  changePlaybackSpeed={changePlaybackSpeed}
                 />
               ) : (
                 <LyricsDisplay
@@ -103,6 +121,7 @@ export default function PronunciationCourseUnit() {
                   currentLyricIndex={currentLyricIndex}
                   lyricRefs={lyricRefs}
                   onShowAutoPausePlayer={handleShowAutoPausePlayer}
+                  currentProgress={currentProgress}
                 />
               )}
               {isCurrentProgressFull && !isPlaying && (
@@ -129,7 +148,7 @@ export default function PronunciationCourseUnit() {
           )}
         </div>
       ) : (
-        <LessonComplete />
+        <LessonComplete unitId={lyricsUnitMeta?.slug || ''} />
       )}
     </>
   );

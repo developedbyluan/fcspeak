@@ -32,6 +32,10 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const [showAutoPausePlayer, setShowAutoPausePlayer] = useState(true);
   const [isAutoPauseOn, setIsAutoPauseOn] = useState(false);
 
+  const [currentProgress, setCurrentProgress] = useState<number[]>([]);
+
+  const [playbackRate, setPlaybackRate] = useState(1);
+
   const { toast } = useToast();
 
   useEffect(() => {
@@ -46,6 +50,15 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     });
 
     addLessonMetaToContinueTrainingHistoryInLocalStorage(lyricsUnit.meta.slug);
+
+    // TODO: get current progress from local storage
+    const unitPronunciationLogs = localStorage.getItem(logsName);
+    if (unitPronunciationLogs) {
+      const unitPronunciationLogsObj = JSON.parse(unitPronunciationLogs);
+      const currentProgress =
+        unitPronunciationLogsObj[lyricsUnit.meta.slug].currentProgress;
+      setCurrentProgress(currentProgress);
+    }
   }, [lyricsUnit]);
 
   useEffect(() => {
@@ -60,8 +73,14 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   }, [currentLyricIndex]);
 
   useEffect(() => {
+    console.log("1. isLineFinished", isLineFinished);
     if (!isLineFinished) return;
     handleSaveUnitPronunciationCourseLog();
+    setCurrentProgress((prev) => {
+      const newProgress = [...prev];
+      newProgress[currentLyricIndex] += 1;
+      return newProgress;
+    });
   }, [isLineFinished]);
 
   useEffect(() => {
@@ -156,7 +175,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     audioElement.currentTime = lyricsUnit.lyrics[currentLyricIndex].startTime;
     audioElement.play();
     setIsPlaying(true);
-    setIsLineFinished(false);
+    // setIsLineFinished(false);
     handleLineFinished();
   };
 
@@ -170,23 +189,56 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     const lineDuration = endTime - startTime;
 
     lineTimeOutRef.current = setTimeout(() => {
+      console.log("handleLineFinished");
       audioElement.pause();
       setIsPlaying(false);
       setIsLineFinished(true);
       if (!isAutoPauseOn) {
         handleNextLine();
       }
-    }, lineDuration * 1000);
+    }, (lineDuration * 1000) / playbackRate);
   };
 
   const handleNextLine = () => {
     if (!lyricsUnit) return;
     if (currentLyricIndex === lyricsUnit.lyrics.length - 1) {
-      setCurrentLyricIndex(0);
+      const audioElement = audioRef.current;
+      if (!audioElement) return;
+      audioElement.pause();
+      setIsPlaying(false);
+      if (!isAutoPauseOn) {
+        updateCurrentProgressToLocalStorage(lyricsUnit);
+        setCurrentProgress((prev) => {
+          const newProgress = [...prev];
+          newProgress[currentLyricIndex] += 1;
+          return newProgress;
+        });
+        setIsCurrentProgressFull(true);
+      }
     } else {
+      if (!isAutoPauseOn) {
+        updateCurrentProgressToLocalStorage(lyricsUnit);
+        setCurrentProgress((prev) => {
+          const newProgress = [...prev];
+          newProgress[currentLyricIndex] += 1;
+          return newProgress;
+        });
+      }
       setCurrentLyricIndex((prevIndex) => prevIndex + 1);
     }
     setIsLineFinished(false);
+
+    function updateCurrentProgressToLocalStorage(lyricsUnit: LyricsUnit) {
+      const pronunciationLogs = localStorage.getItem(logsName);
+      if (!pronunciationLogs) return;
+      const pronunciationLogsObj = JSON.parse(pronunciationLogs);
+      pronunciationLogsObj[lyricsUnit.meta.slug].currentIndex =
+        currentLyricIndex;
+      pronunciationLogsObj[lyricsUnit.meta.slug].currentProgress[
+        currentLyricIndex
+      ] += 1;
+      localStorage.setItem(logsName, JSON.stringify(pronunciationLogsObj));
+    }
   };
 
   const handleCalculateAudioProgress = () => {
@@ -334,6 +386,14 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     setIsAutoPauseOn((prev) => !prev);
   };
 
+  const changePlaybackSpeed = () => {
+    if (!audioRef.current) return;
+    setPlaybackRate((prev) =>
+      prev >= 2 ? 0.5 : Number((prev + 0.1).toFixed(1))
+    );
+    audioRef.current.playbackRate = playbackRate;
+  };
+
   return {
     audioSrc,
     audioRef,
@@ -357,5 +417,8 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     setCurrentLyricIndex,
     isAutoPauseOn,
     handleAutoPause,
+    currentProgress,
+    playbackRate,
+    changePlaybackSpeed,
   };
 }

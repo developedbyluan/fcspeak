@@ -3,11 +3,11 @@
 import { useState } from "react";
 import CourseCardHeader from "./CourseCardHeader";
 import LessonGrid from "./LessonGrid";
-import { Lesson } from "@/types/lesson";
+import { LyricsUnitMetaWithId } from "@/types/lyric";
 
 type CourseCardProps = {
   title: string;
-  lessons: Lesson[];
+  lessons: LyricsUnitMetaWithId[];
 };
 
 export default function CourseCard({ title, lessons }: CourseCardProps) {

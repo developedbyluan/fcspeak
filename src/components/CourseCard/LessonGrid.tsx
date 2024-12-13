@@ -1,9 +1,9 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import LessonCard from "./LessonCard";
-import { Lesson } from "@/types/lesson";
+import { LyricsUnitMetaWithId } from "@/types/lyric";
 
 type LessonGridProps = {
-  lessons: Lesson[];
+  lessons: LyricsUnitMetaWithId[];
   isVertical: boolean;
 };
 

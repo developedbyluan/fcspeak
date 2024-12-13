@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation'
 import Confetti from 'react-confetti'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { BarChart2 } from 'lucide-react'
 
-export default function LessonComplete() {
+export default function LessonComplete({ unitId }: { unitId: string }) {
   const router = useRouter()
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
 
@@ -21,6 +22,10 @@ export default function LessonComplete() {
 
   const handleContinue = () => {
     router.push('/')
+  }
+
+  const handleViewStats = () => {
+    router.push(`/pronunciation/${unitId}/stats`)
   }
 
   return (
@@ -43,9 +48,13 @@ export default function LessonComplete() {
             </span>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-center">
+        <CardFooter className="flex flex-col mt-2 gap-3 justify-center">
           <Button onClick={handleContinue} size="lg">
             Continue to All Lessons
+          </Button>
+          <Button onClick={handleViewStats} size="lg" variant="outline">
+            <BarChart2 className="w-4 h-4" />
+            View Stats
           </Button>
         </CardFooter>
       </Card>
