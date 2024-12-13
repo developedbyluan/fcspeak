@@ -26,4 +26,8 @@ type LyricsUnit = {
   lyrics: Lyric[];
 };
 
-export type { Lyric, LyricsUnit, LyricsUnitMeta };
+type LyricsUnitMetaWithId = LyricsUnitMeta & {
+  id: number;
+};
+
+export type { Lyric, LyricsUnit, LyricsUnitMeta, LyricsUnitMetaWithId };

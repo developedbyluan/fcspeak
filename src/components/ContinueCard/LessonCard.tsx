@@ -58,13 +58,13 @@ export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
               }`}
             />
             <div>
-              <h3 className="font-semibold text-lg mb-1">{lesson.title}</h3>
-              <p className="text-sm text-muted-foreground mb-1">
+              <h3 className="font-semibold text-lg mb-10">{lesson.title}</h3>
+              {/* <p className="text-sm text-muted-foreground mb-1">
                 {lesson.vietnamese}
-              </p>
-              <p className="text-sm text-muted-foreground">
+              </p> */}
+              {/* <p className="text-sm text-muted-foreground">
                 {fromSecondsToMinutesAndSeconds(Number(lesson.duration))}
-              </p>
+              </p> */}
             </div>
           </div>
         </CardContent>

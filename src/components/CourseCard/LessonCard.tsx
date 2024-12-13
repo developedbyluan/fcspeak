@@ -1,14 +1,14 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Lesson } from "@/types/lesson";
+import { LyricsUnitMetaWithId } from "@/types/lyric";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { BarChart2 } from "lucide-react";
-import { Button } from "../ui/button";
+// import Link from "next/link";
+// import { BarChart2 } from "lucide-react";
+// import { Button } from "../ui/button";
 
 type LessonCardProps = {
-  lesson: Lesson;
+  lesson: LyricsUnitMetaWithId;
   isVertical: boolean;
 };
 
@@ -16,12 +16,13 @@ export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
   const router = useRouter();
 
   const handleLessonCardClick = () => {
-    router.push(`/pronunciation/unit${lesson.id}`);
+    router.push(`/pronunciation/${lesson.id}`);
   };
 
-  const handleStatsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    router.push(`/pronunciation/unit${lesson.id}/stats`);
+  const fromSecondsToMinutesAndSeconds = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -42,13 +43,14 @@ export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
           }
         }}
       >
-        <CardContent className="p-4">
+        <CardContent className="p-4 opacity-60 bg-gray-100 hover:opacity-100 hover:bg-transparent">
+
           <div
             className={`flex ${isVertical ? "flex-row space-x-4" : "flex-col"}`}
           >
             <Image
               priority={false}
-              src={lesson.thumbnail}
+              src={lesson.thumbnail || ""}
               alt={`Thumbnail for ${lesson.title}`}
               width={300}
               height={200}
@@ -61,21 +63,23 @@ export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
               <p className="text-sm text-muted-foreground mb-1">
                 {lesson.vietnamese}
               </p>
-              <p className="text-sm text-muted-foreground">{lesson.duration}</p>
+              <p className="text-sm text-muted-foreground">
+                Duration: <span className="font-semibold">{fromSecondsToMinutesAndSeconds(Number(lesson.duration))}</span>
+              </p>
             </div>
           </div>
         </CardContent>
       </Card>
-      <Link
+      {/* <Link
         className="absolute bottom-2 right-2"
-        href={`/pronunciation/unit${lesson.id}/stats`}
+        href={`/pronunciation/${lesson.id}/stats`}
         passHref
       >
         <Button variant="outline" size="sm" className="mt-2">
           <BarChart2 className="h-4 w-4 mr-2" />
           View Stats
         </Button>
-      </Link>
+      </Link> */}
     </div>
   );
 }
