@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
-import { unit1 } from "@/data/pronunciation/unit1-lyrics-data";
 import AudioFileInput from "@/components/AudioPlayer/AudioFileInput";
 import { AudioFileInputSkeleton } from "@/components/AudioPlayer/AudioFileInputSkeleton";
 import AutoPausePlayer from "../AutoPausePlayer";
@@ -8,8 +7,6 @@ import { LyricsUnit } from "@/types/lyric";
 
 import ProgressBar from "../AudioPlayer/ProgressBar";
 import LessonComplete from "./LessonComplete";
-import { Button } from "@/components/ui/button";
-import { CheckIcon } from "lucide-react";
 
 import LyricsDisplay from "../LyricsDisplay";
 import { toast } from "@/hooks/use-toast";
