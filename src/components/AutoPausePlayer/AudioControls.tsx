@@ -7,12 +7,12 @@ import {
   LucideSkipForward,
   MessageSquareQuote,
   Mic,
+  MicOff,
   MonitorPause,
 } from "lucide-react";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { toast } from "@/hooks/use-toast";
 
 type AudioControlsProps = {
   isPlaying: boolean;
@@ -30,6 +30,9 @@ type AudioControlsProps = {
   handleAutoPause: () => void;
   playbackRate: number;
   changePlaybackSpeed: () => void;
+  startRecording: () => void;
+  stopRecording: () => void;
+  isRecording: boolean;
 };
 
 export default function AudioControls({
@@ -48,6 +51,9 @@ export default function AudioControls({
   handleAutoPause,
   playbackRate,
   changePlaybackSpeed,
+  startRecording,
+  stopRecording,
+  isRecording,
 }: AudioControlsProps) {
   const [isSynced, setIsSynced] = useState(false);
   const ariaLabel = isPlaying ? "Pause" : "Click to play";
@@ -123,9 +129,15 @@ export default function AudioControls({
             className="fixed w-full bottom-2 px-1"
           >
             <div className="mx-auto bg-gradient-to-r from-zinc-700 via-zinc-700 to-zinc-600 rounded-xl px-3 py-5 flex justify-between items-center">
-              <button>
-                <Mic stroke="white" size={32} />
-              </button>
+              {isRecording ? (
+                <button onClick={stopRecording} aria-label="Stop recording">
+                  <MicOff stroke="white" size={32} />
+                </button>
+              ) : (
+                <button onClick={startRecording} aria-label="Start recording">
+                  <Mic stroke="white" size={32} />
+                </button>
+              )}
               <button
                 onClick={onTogglePlayPause}
                 disabled={disabled}
