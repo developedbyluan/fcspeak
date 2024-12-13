@@ -1,6 +1,6 @@
 import { Square } from "lucide-react";
 import type { Lyric } from "@/types/lyric";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 type VoiceRecorderProps = {
   isRecording: boolean;
@@ -18,6 +18,7 @@ export default function VoiceRecorder({
   currentLyric,
 }: VoiceRecorderProps) {
   const [isMicReady, setIsMicReady] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -25,9 +26,28 @@ export default function VoiceRecorder({
     }, 2000);
   }, []);
 
+  useEffect(() => {
+    if (!isRecording) return;
+
+    timeoutRef.current = setTimeout(() => {
+      stopRecordingAndTranscribing();
+    }, 2000 + (currentLyric.endTime - currentLyric.startTime) * 2 * 1000);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, [isRecording]);
+
   const stopRecordingAndTranscribing = () => {
     stopRecording();
     stopTranscribing();
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
   };
   return (
     <div className="absolute z-50 inset-0 bg-slate-900 flex flex-col justify-evenly items-center p-7">

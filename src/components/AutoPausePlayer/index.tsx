@@ -60,10 +60,6 @@ export default function AutoPausePlayer({
     isRecordedAudioPlaying,
   } = useVoiceRecorder();
 
-  useEffect(() => {
-    console.log(isPlaying, isRecordedAudioPlaying);
-  }, [isPlaying, isRecordedAudioPlaying]);
-
   return (
     <div>
       <SingleLyricDisplay
