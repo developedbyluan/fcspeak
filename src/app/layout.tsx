@@ -6,8 +6,9 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MiniStory.app",
-  description: "AI-powered Flashcards for Vocabulary Memorization",
+  title: "Flashcard for Speaking Comfortably",
+  description:
+    "Flashcard app for speaking English comfortably and vocabulary memorization",
 };
 
 export default function RootLayout({
@@ -17,6 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* <head>
+        <meta name="apple-mobile-web-app-title" content="SpeakFc" />
+      </head> */}
       <body className={inter.className}>
         {children}
         <Toaster />
