@@ -22,7 +22,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="w-full max-w-[768px] border border-neutral-400 mx-auto p-6">
+    <main className="w-full max-w-[768px] mx-auto p-6">
       {continueLessons.length > 0 && (
         <ContinueCard title="Continue Training" lessons={continueLessons} />
       )}

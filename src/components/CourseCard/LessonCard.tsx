@@ -43,7 +43,7 @@ export default function LessonCard({ lesson, isVertical }: LessonCardProps) {
           }
         }}
       >
-        <CardContent className="p-4 opacity-60 bg-gray-100 hover:opacity-100 hover:bg-transparent">
+        <CardContent className="p-4">
 
           <div
             className={`flex ${isVertical ? "flex-row space-x-4" : "flex-col"}`}
