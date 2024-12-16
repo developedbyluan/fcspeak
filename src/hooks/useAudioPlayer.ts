@@ -94,19 +94,19 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     const lastLogDay = pronunciationLogsObj[lyricsUnit.meta.slug].logs.at(-1);
     const lastLogDayNumber = Number(Object.keys(lastLogDay)[0]);
     const lastLogDate = lastLogDay[lastLogDayNumber].date;
-    const currentProgress =
+    const currentProgressOnLocalStorage =
       pronunciationLogsObj[lyricsUnit.meta.slug].currentProgress;
 
     if (lastLogDate !== today) {
       pronunciationLogsObj[lyricsUnit.meta.slug].logs.push({
         [lastLogDayNumber + 1]: {
-          reps: currentProgress,
+          reps: [currentProgressOnLocalStorage],
           dayName: dayName,
           date: today,
         },
       });
     } else {
-      lastLogDay[lastLogDayNumber].reps.push(currentProgress);
+      lastLogDay[lastLogDayNumber].reps.push(currentProgressOnLocalStorage);
     }
     pronunciationLogsObj[lyricsUnit.meta.slug].currentIndex = 0;
     pronunciationLogsObj[lyricsUnit.meta.slug].currentProgress = zeroes;
