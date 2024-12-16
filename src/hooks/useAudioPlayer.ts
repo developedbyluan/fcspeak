@@ -200,45 +200,38 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
 
   const handleNextLine = () => {
     if (!lyricsUnit) return;
+
+    const audioElement = audioRef.current;
+    if (!audioElement) return;
+
+    if (!isAutoPauseOn) {
+      updateCurrentProgressToLocalStorage(lyricsUnit.meta.slug);
+      setCurrentProgress((prev) => {
+        const newProgress = [...prev];
+        newProgress[currentLyricIndex] += 1;
+        return newProgress;
+      });
+    }
+
     if (currentLyricIndex === lyricsUnit.lyrics.length - 1) {
-      const audioElement = audioRef.current;
-      if (!audioElement) return;
       audioElement.pause();
       setIsPlaying(false);
-      if (!isAutoPauseOn) {
-        updateCurrentProgressToLocalStorage(lyricsUnit);
-        setCurrentProgress((prev) => {
-          const newProgress = [...prev];
-          newProgress[currentLyricIndex] += 1;
-          return newProgress;
-        });
-        setIsCurrentProgressFull(true);
-      }
     } else {
-      if (!isAutoPauseOn) {
-        updateCurrentProgressToLocalStorage(lyricsUnit);
-        setCurrentProgress((prev) => {
-          const newProgress = [...prev];
-          newProgress[currentLyricIndex] += 1;
-          return newProgress;
-        });
-      }
       setCurrentLyricIndex((prevIndex) => prevIndex + 1);
     }
     setIsLineFinished(false);
-
-    function updateCurrentProgressToLocalStorage(lyricsUnit: LyricsUnit) {
-      const pronunciationLogs = localStorage.getItem(logsName);
-      if (!pronunciationLogs) return;
-      const pronunciationLogsObj = JSON.parse(pronunciationLogs);
-      pronunciationLogsObj[lyricsUnit.meta.slug].currentIndex =
-        currentLyricIndex;
-      pronunciationLogsObj[lyricsUnit.meta.slug].currentProgress[
-        currentLyricIndex
-      ] += 1;
-      localStorage.setItem(logsName, JSON.stringify(pronunciationLogsObj));
-    }
   };
+
+  function updateCurrentProgressToLocalStorage(lyricsUnitSlug: string) {
+    const pronunciationLogs = localStorage.getItem(logsName);
+    if (!pronunciationLogs) return;
+    const pronunciationLogsObj = JSON.parse(pronunciationLogs);
+    pronunciationLogsObj[lyricsUnitSlug].currentIndex = currentLyricIndex;
+    pronunciationLogsObj[lyricsUnitSlug].currentProgress[
+      currentLyricIndex
+    ] += 1;
+    localStorage.setItem(logsName, JSON.stringify(pronunciationLogsObj));
+  }
 
   const handleCalculateAudioProgress = () => {
     if (!lyricsUnit) return;

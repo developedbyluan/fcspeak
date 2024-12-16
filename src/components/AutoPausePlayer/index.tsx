@@ -4,7 +4,6 @@ import { Lyric } from "@/types/lyric";
 import { useVoiceRecorder } from "@/hooks/use-voice-recorder";
 import VoiceRecorder from "../VoiceRecorder";
 import PlayVoiceRecording from "../PlayVoiceRecording";
-import { useEffect } from "react";
 
 type AutoPausePlayerProps = {
   currentLyric: Lyric;
