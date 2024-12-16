@@ -69,6 +69,10 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
       currentLine: currentLyricIndex + 1,
       totalLines: lyricsUnit.lyrics.length,
     });
+
+    if (currentLyricIndex === lyricsUnit.lyrics.length - 1) {
+      setIsCurrentProgressFull(true);
+    }
   }, [currentLyricIndex]);
 
   useEffect(() => {
