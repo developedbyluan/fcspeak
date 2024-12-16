@@ -76,7 +76,6 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   }, [currentLyricIndex]);
 
   useEffect(() => {
-    console.log("1. isLineFinished", isLineFinished);
     if (!isLineFinished) return;
     handleSaveUnitPronunciationCourseLog();
     setCurrentProgress((prev) => {
@@ -192,7 +191,6 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
     const lineDuration = endTime - startTime;
 
     lineTimeOutRef.current = setTimeout(() => {
-      console.log("handleLineFinished");
       audioElement.pause();
       setIsPlaying(false);
       setIsLineFinished(true);
@@ -385,7 +383,7 @@ export default function useAudioPlayer(lyricsUnit: LyricsUnit | null) {
   const changePlaybackSpeed = () => {
     if (!audioRef.current) return;
     const newPlaybackRate =
-      playbackRate < 0.5 ? 2 : Number((playbackRate - 0.1).toFixed(1));
+      playbackRate <= 0.5 ? 2 : Number((playbackRate - 0.1).toFixed(1));
     setPlaybackRate(newPlaybackRate);
     audioRef.current.playbackRate = newPlaybackRate;
   };
